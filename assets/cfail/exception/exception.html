@@ -1,0 +1,23 @@
+<div>
+  <div class="row">
+    <div class="col-md-6">
+      <h1>{{exception.name}} failure</h1>
+    </div>
+    <div class="col-md-6">
+      <div>状态: {{exception.status}}</div>
+      <div>错误首次发生于: {{exception.createdAt}}</div>
+    </div>
+  </div>
+
+  <div>
+    <tabset>
+      <tab heading="详情">
+        <h3>STACK TRACE</h3>
+        <pre class="stack-trace">{{exception.stack}}</pre>
+      </tab>
+      <tab heading="历史记录" select="showOccurrences()">
+        <div ng-include="exceptionOccurrenceTemplateUrl"></div>
+      </tab>
+    </tabset>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+{
+  "name": "cfail",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Cfail is a exception monitoring system",
+  "dependencies": {
+    "sails": "0.9.16",
+    "grunt": "0.4.1",
+    "sails-disk": "~0.9.0",
+    "optimist": "0.3.4",
+    "sails-mongo": "~0.9.7",
+    "bcrypt": "~0.7.7",
+    "lodash": "2.3.0",
+    "deferred": "~0.7.0",
+    "ua-parser": "~0.3.3",
+    "mongodb": "~1.4.1",
+    "moment": "~2.6.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-vows": "~0.4.1",
+    "karma": "~0.12.9",
+    "karma-chrome-launcher": "~0.1.3",
+    "karma-jasmine": "~0.1.5",
+    "requirejs": "~2.1.11",
+    "karma-requirejs": "~0.2.1"
+  },
+  "scripts": {
+    "postinstall": "bower install",
+    "start": "node app.js",
+    "debug": "node debug app.js",
+    "test": "grunt vows"
+  },
+  "main": "app.js",
+  "repository": "",
+  "author": "",
+  "license": ""
+}

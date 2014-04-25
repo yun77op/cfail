@@ -1,0 +1,21 @@
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>发生日期</th>
+    <th>用户名</th>
+    <th>client</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="occurrence in occurrences">
+    <td>{{occurrence.createdAt}}</td>
+    <td>{{occurrence.username}}</td>
+    <td>
+      <span ng-if="occurence.client_ua">{{occurence.client_ua | lowercase}}</span> +
+      <span ng-if="occurence.client_os">{{occurence.client_os | lowercase}}</span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<pagination class="pagination-sm" total-items="p.total" on-select-page="paginate(page)" page="p.currentPage" max-size="p.maxSize" boundary-links="true"></pagination>

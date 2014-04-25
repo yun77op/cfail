@@ -1,0 +1,21 @@
+<div class="container">
+
+    <!--
+        application.nodata module
+        ========================
+    -->
+    <% var nodataComponent = generateComponent('app-nodata'); %>
+    <div class="ap-nodata" ng-controller="NodataController" id="<%= nodataComponent.id %>">
+        <div class="plain-text">你还没有创建应用呢</div>
+        <a href="" ng-click="showCreateModal();" id="<%= nodataComponent.getChildElementIdByName('submit') %>">创建应用</a>
+    </div>
+
+    <script>
+        ah.addComponentMetadata({
+            moduleName: 'application-nodata',
+            elementId: '<%= nodataComponent.id %>',
+            deps: ['/cfail/application/application-nodata/application-nodata.js']
+        });
+    </script>
+
+</div>

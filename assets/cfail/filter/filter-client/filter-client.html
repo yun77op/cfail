@@ -1,0 +1,21 @@
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>错误次数</th>
+    <th>浏览器和操作系统</th>
+    <th>最后发生日期</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="occurrence in occurrences">
+    <td>{{occurrence.occurrence}}</td>
+    <td>
+      <span><img ng-src="/images/agent/{{occurrence.client_ua | ua}}.png"> + <img ng-src="/images/agent/{{occurrence.client_os | ua}}.png"></span>
+      <span>{{occurrence.client_ua}} && {{occurrence.client_os}}</span>
+    </td>
+    <td>{{occurrence.latestOccurrenceAt}}</td>
+  </tr>
+  </tbody>
+</table>
+<pagination class="pagination-sm" total-items="p.total" on-select-page="paginate(page)" page="p.currentPage" max-size="p.maxSize" boundary-links="true"></pagination>

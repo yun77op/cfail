@@ -1,0 +1,18 @@
+<div class="container">
+    <form role="form" action="/signup" method="post">
+        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+        <div class="form-group">
+            <label for="loginInputUsername">用户名</label>
+            <input type="text" class="form-control" id="loginInputUsername" placeholder="请输入用户" required name="name">
+        </div>
+        <div class="form-group">
+            <label for="loginInputPasswd">密码</label>
+            <input type="password" class="form-control" id="loginInputpasswd" required name="passwd">
+        </div>
+        <div class="form-group">
+            <label for="loginInputPasswd1">密码</label>
+            <input type="password" class="form-control" id="loginInputpasswd1" required name="passwd1">
+        </div>
+        <button type="submit" class="btn btn-default">确定</button>
+    </form>
+</div>

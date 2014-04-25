@@ -1,0 +1,18 @@
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>错误次数</th>
+    <th>用户</th>
+    <th>最后发生日期</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="occurrence in occurrences">
+    <td>{{occurrence.occurrence}}</td>
+    <td>{{occurrence.username}}</td>
+    <td>{{occurrence.latestOccurrenceAt}}</td>
+  </tr>
+  </tbody>
+</table>
+<pagination class="pagination-sm" total-items="p.total" on-select-page="paginate(page)" page="p.currentPage" max-size="p.maxSize" boundary-links="true"></pagination>

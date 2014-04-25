@@ -1,0 +1,16 @@
+{
+  "name": "cfail",
+  "description": "Cfail is a exception monitoring system",
+  "version": "0.0.0",
+  "homepage": "https://github.com/yun77op/cfail",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "angular-loader": "1.2.x",
+    "angular-mocks": "1.2.15",
+    "angular-bootstrap": "0.10.0",
+    "bootstrap": "3.0.3"
+  }
+}

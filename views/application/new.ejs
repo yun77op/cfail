@@ -1,0 +1,10 @@
+<div class="container">
+    <form role="form" action="/application/postNew" method="post">
+        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+        <div class="form-group">
+            <label for="applicationInputName">应用名</label>
+            <input type="text" class="form-control" id="applicationInputName" placeholder="" required name="name">
+        </div>
+        <button type="submit" class="btn btn-default">确定</button>
+    </form>
+</div>
