@@ -3,7 +3,7 @@ webservers_production
 webservers_staging
 
 [webservers_production]
-app-48.photo.163.org env=production branch=master
+app-48.photo.test.org env=production branch=master
 
 [webservers_staging]
 192.168.33.10 env=staging branch=master

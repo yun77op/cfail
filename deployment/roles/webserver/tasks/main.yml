@@ -8,3 +8,5 @@
 
 - name: Install npm packages
   npm: path={{project_root}} state=present
+  environment:
+    CI: true
