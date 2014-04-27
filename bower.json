@@ -11,6 +11,11 @@
     "angular-loader": "1.2.x",
     "angular-mocks": "1.2.15",
     "angular-bootstrap": "0.10.0",
-    "bootstrap": "3.0.3"
+    "bootstrap": "3.0.3",
+    "highcharts": "3.0.7",
+    "highcharts-ng": "0.0.6",
+    "jquery": "1.9.1",
+    "requirejs": "2.1.10",
+    "requirejs-text": "2.0.10"
   }
 }
