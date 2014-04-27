@@ -1,0 +1,15 @@
+---
+
+- hosts: ci
+  gather_facts: no
+  vars_files:
+    - roles/webserver/vars/main.yml
+  sudo: true
+  sudo_user: vagrant
+
+  tasks:
+    - include: roles/webserver/tasks/setup-project.yml
+
+  handlers:
+    - name: Restart webserver
+      shell: pkill -9 Concrete; nohup concrete {{project_root}} > cfail.log 2>&1 &

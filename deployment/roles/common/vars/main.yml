@@ -1,0 +1,14 @@
+---
+system_packages:
+ - software-properties-common
+ - python-software-properties
+ - python
+ - g++
+ - make
+ - git
+ - python-pip
+npm_packages:
+ - pm2
+ - grunt-cli
+ - bower
+ - sails

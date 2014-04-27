@@ -1,0 +1,4 @@
+---
+- name: restart webserver
+  shell: chdir={{project_root}} pm2 restart {{project_name}}
+  when: not initial_run

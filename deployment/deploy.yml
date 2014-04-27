@@ -1,0 +1,9 @@
+---
+
+- hosts: webservers
+  gather_facts: no
+  sudo: true
+  sudo_user: vagrant
+
+  roles:
+    - { role: webserver, initial_run: false }

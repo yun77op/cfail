@@ -1,0 +1,37 @@
+---
+
+- name: Install required system packages.
+  apt: pkg={{item}} state=installed
+  with_items: system_packages
+  sudo_user: root
+
+- name: Add nodejs source respository
+  apt_repository: repo='ppa:chris-lea/node.js'
+  sudo_user: root
+
+- name: Add mongodb source respository
+  apt_repository: repo='deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' state=absent
+  sudo_user: root
+
+- name: Import mongodb apt_key
+  apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=7F0CEB10 state=present
+  sudo_user: root
+
+- name: Install required system packages.
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - nodejs
+    - mongodb-org
+  sudo_user: root
+
+- name: Install required npm global packages.
+  npm: name={{item}} global=yes
+  with_items: npm_packages
+  sudo_user: root
+
+- name: Install pip modules
+  pip: name=pymongo
+  sudo_user: root
+
+- name: Create mogodb user
+  mongodb_user: database=cfail name=cfail password=cfail roles='readWrite,dbAdmin' state=present

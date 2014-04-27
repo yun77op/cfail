@@ -1,0 +1,10 @@
+---
+
+- include: setup-project.yml
+
+- name: Start webserver
+  shell: chdir={{project_root}} pm2 start {{project_root}}/app.js --name {{project_name}}
+  when: initial_run
+
+- name: Install npm packages
+  npm: path={{project_root}} state=present

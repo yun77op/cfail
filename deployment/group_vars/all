@@ -1,0 +1,11 @@
+# The port in which mongos server should listen on 
+mongos_port: 8888
+
+# The port for mongo config server
+mongoc_port: 7777
+
+project_name: cfail
+
+project_root: /vagrant/code/cfail
+
+project_repo: https://github.com/yun77op/cfail.git

@@ -1,0 +1,9 @@
+- name: Create the project directory
+  file: state=directory path={{project_root}}
+
+- name: Pull sources from the repository.
+  git: repo={{project_repo}} dest={{project_root}}/ version={{branch}}
+  notify: restart webserver
+
+- name: Upload configuration.
+  copy: src=local.{{env}}.js dest={{project_root}}/config/local.js
