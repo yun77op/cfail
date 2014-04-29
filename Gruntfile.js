@@ -164,7 +164,7 @@ module.exports = function (grunt) {
           verbose: false
         },
 
-        src: ["tests/*.js"]
+        src: ["tests/*_test.js"]
       }
     },
 

@@ -1,4 +1,6 @@
 require.config({
+  baseUrl: '/cfail',
+
   paths: {
     'angular': '../../components/angular/angular',
     'angular.route': '../../components/angular-route/angular-route',

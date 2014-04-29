@@ -1,13 +1,13 @@
 define(['angular',
         'angular.route',
-        './filter/filter-user/filter-user',
-        './filter/filter-url/filter-url',
-        './filter/filter-failures/filter-failures',
-        './filter/filter-client/filter-client',
-        './exception/exception',
-        './admin/admin',
-        './report/report',
-        './application/application-create-dialog/application-create-dialog'], function(angular) {
+        'filter/filter-user/filter-user',
+        'filter/filter-url/filter-url',
+        'filter/filter-failures/filter-failures',
+        'filter/filter-client/filter-client',
+        'exception/exception',
+        'admin/admin',
+        'report/report',
+        'application/application-create-dialog/application-create-dialog'], function(angular) {
 
   var deps = ['cfail',
               'ngRoute',

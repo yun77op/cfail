@@ -15,14 +15,14 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 
 require.config({
   paths: {
-    'angular': './components/angular/angular',
-    'angular.route': './components/angular-route/angular-route',
-    'angular.bootstrap': './components/angular-bootstrap/ui-bootstrap-tpls',
-    'text': './components/requirejs-text/text',
-    'jquery': './components/jquery/jquery',
-    'highcharts': './components/highcharts/highcharts.src',
-    'angular.hightcharts': './components/highcharts-ng/dist/highcharts-ng',
-    'angular.mocks': './components/angular-mocks/angular-mocks'
+    'angular': '../components/angular/angular',
+    'angular.route': '../components/angular-route/angular-route',
+    'angular.bootstrap': '../components/angular-bootstrap/ui-bootstrap-tpls',
+    'text': '../components/requirejs-text/text',
+    'jquery': '../components/jquery/jquery',
+    'highcharts': '../components/highcharts/highcharts.src',
+    'angular.hightcharts': '../components/highcharts-ng/dist/highcharts-ng',
+    'angular.mocks': '../components/angular-mocks/angular-mocks'
   },
 
   shim: {
@@ -34,11 +34,11 @@ require.config({
   },
 
   // Karma serves files under /base, which is the basePath from your config file
-  baseUrl: '/base/assets',
+  baseUrl: '/base/assets/cfail',
 
   // dynamically load all test files
 //  deps: allTestFiles,
-  deps: ['./cfail/cfail'],
+  deps: ['cfail'],
 
   // we have to kickoff jasmine, as it is asynchronous
   callback: function() {

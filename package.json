@@ -29,7 +29,8 @@
     "postinstall": "bower install",
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "grunt vows"
+    "test": "grunt vows",
+    "test_frontend": "./node_modules/karma/bin/karma start tests/karma.conf.js"
   },
   "main": "app.js",
   "repository": "",

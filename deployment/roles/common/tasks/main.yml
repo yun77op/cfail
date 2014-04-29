@@ -33,5 +33,5 @@
   pip: name=pymongo
   sudo_user: root
 
-- name: Create mogodb user
-  mongodb_user: database=cfail name=cfail password=cfail roles='readWrite,dbAdmin' state=present
+- name: Create mongodb user
+  mongodb_user: database={{project_name}} name={{project_name}} password={{project_name}} roles='readWrite,dbAdmin' state=present
