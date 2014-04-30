@@ -7,8 +7,14 @@ system_packages:
  - make
  - git
  - python-pip
+ # phantomjs deps
+ - libfontconfig
+ - libfontconfig-dev
+ - libfreetype6-dev
 npm_packages:
  - pm2
  - grunt-cli
  - bower
  - sails
+ # CI server
+ - concrete

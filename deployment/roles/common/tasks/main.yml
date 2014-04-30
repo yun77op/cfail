@@ -35,3 +35,16 @@
 
 - name: Create mongodb user
   mongodb_user: database={{project_name}} name={{project_name}} password={{project_name}} roles='readWrite,dbAdmin' state=present
+
+- name: Download phantomjs
+  command: wget -O ~/tmp/phantomjs-1.9.7-linux-x86_64.tar.bz2 http://cdn.bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2 creates=~/tmp/phantomjs-1.9.7-linux-x86_64.tar.bz2
+
+- name: Unpack phantomjs
+  command: tar jxvf ~/tmp/phantomjs-1.9.7-linux-x86_64.tar.bz2
+
+- name: Copy phantomjs to /usr/local/bin
+  command: cp ~/tmp/phantomjs-1.9.7-linux-x86_64.tar.bz2 /usr/local/bin
+  sudo_user: root
+
+- name: Remove phantomjs dir
+  command: rm -r ~/tmp/phantomjs-1.9.7-linux-x86_64.tar.bz2
