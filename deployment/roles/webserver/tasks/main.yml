@@ -6,7 +6,11 @@
   shell: chdir={{project_root}} pm2 start {{project_root}}/app.js --name {{project_name}}
   when: initial_run
 
+# TODO: Use heroku-buildpack-nodejs
 - name: Install npm packages
   npm: path={{project_root}} state=present
   environment:
     CI: true
+
+- name: Run `npm prune` to ensure cleanup of unused dependencies
+  shell: chdir={{project_root}} npm prune

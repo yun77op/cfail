@@ -20,7 +20,7 @@
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-vows": "~0.4.1",
     "karma": "~0.12.9",
-    "karma-phantomjs-launcher‎": "*",
+    "karma-phantomjs-launcher‎": "0.1.4",
     "karma-jasmine": "~0.1.5",
     "requirejs": "~2.1.11",
     "karma-requirejs": "~0.2.1"
@@ -35,5 +35,8 @@
   "main": "app.js",
   "repository": "",
   "author": "",
-  "license": ""
+  "license": "",
+  "engines": {
+    "node": "0.10.18"
+  }
 }
