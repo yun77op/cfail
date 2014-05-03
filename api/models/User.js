@@ -14,7 +14,7 @@ module.exports = {
 
   attributes: {
     name: {
-      type: 'STRING',
+      type: 'email',
       required: true,
       unique: true
     },
@@ -23,6 +23,29 @@ module.exports = {
       minLength: 6,
       required: true,
       columnName: 'encrypted_passwd'
+    },
+
+    emailVerified: {
+      type: 'boolean',
+      required: true,
+      defaultsTo: false
+    },
+
+    role: {
+      type: 'STRING',
+      required: true,
+      in: ['admin', 'collaborator'],
+      defaultsTo: 'collaborator'
+    },
+
+    secret: {
+      type: 'STRING',
+      required: true,
+      unique: true
+    },
+
+    appId: {
+      type: 'STRING'
     }
   },
 

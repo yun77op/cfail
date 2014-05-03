@@ -16,6 +16,10 @@
  */
 
 var _ = require('lodash');
+var deferred = require('deferred');
+var httputils = require('../../lib/httputils');
+var secrets = require('../../lib/secrets');
+var email = require('../../lib/mail');
 
 module.exports = {
     
@@ -54,25 +58,76 @@ module.exports = {
   },
 
   signup: function(req, res) {
-    var user = _.pick(req.body, 'name', 'passwd');
+    var user = _.pick(req.body, 'name', 'passwd', 'role', 'appId');
+    var explicitPassword;
+
+    if (user.role === 'collaborator') {
+      explicitPassword = secrets.weakGenerate(8);
+      user.passwd = explicitPassword;
+    }
+
+    var secret = secrets.weakGenerate(24);
+    user.secret = secret;
 
     User.create(user).
-      done(function(err) {
+      done(function(err, user) {
         if (err) {
-          res.send(err, 500);
+          res.serverError(err);
           return;
         }
 
-        res.send({
-          success: true
-        });
+        // Send verification email
+        email.sendNewUserEmail(user.name, secret, { explicitPassword: explicitPassword });
+
+        httputils.success(res, { user: user });
       });
   },
 
   signout: function(req, res) {
     req.session.destroy();
-    res.send({
-      success: true
-    });
+    httputils.success(res);
+  },
+
+  destroy: function(req, res) {
+    sails.log.info('UserController: destroy user ' + req.body.id);
+
+    User.destroy({
+      id: req.body.id
+    }).done(function(err) {
+        if (err) return res.serverError(err);
+        httputils.success(res);
+      });
+  },
+
+  verify_email_address: function(req, res) {
+    var token = req.query.token;
+
+    User.findOne({ secret: token }).
+      then(function(user) {
+        if (!!user) {
+          user.emailVerified = true;
+
+          // method model.save returns undefined, not promise
+          var def = deferred();
+          user.save(function(err, user) {
+            if (err) def.reject(err);
+            else def.resolve(true);
+          });
+
+          return def.promise;
+        }
+
+        return false;
+      }).
+      done(function(success) {
+        var ctx = {};
+
+        ctx.message = !success ? 'Could\'t complete email verification' : 'Success';
+        ctx.success = success;
+
+        res.view('user/confirm', ctx);
+      }, function(err) {
+        res.serverError(err)
+      });
   }
 };

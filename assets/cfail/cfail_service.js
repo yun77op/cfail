@@ -13,6 +13,10 @@ define(['angular'], function(angular) {
             success(function() {
               location.href = '/';
             });
+        },
+
+        signup: function() {
+
         }
       }
     }]);

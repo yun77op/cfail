@@ -45,14 +45,14 @@ define(['angular',
         }).
         when('/app/:appId/report', {
           templateUrl: '/cfail/report/report.html',
-          controller: 'RController'
+          controller: 'ReportController'
         }).
         when('/app/failure/:exceptionId', {
           templateUrl: '/cfail/exception/exception.html',
           controller: 'ExceptionController'
         }).
         otherwise({
-          redirectTo: '/apps'
+          redirectTo: '/'
         });
 
       $locationProvider.html5Mode(true);

@@ -1,0 +1,10 @@
+<div class="container">
+    <p><%= message %></p>
+    <% if (success) { %>
+        <script>
+            setTimeout(function() {
+                location.href = '/login';
+            }, 2000);
+        </script>
+    <% } %>
+</div>
