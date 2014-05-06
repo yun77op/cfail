@@ -1,5 +1,5 @@
 define(['angular', 'angular.bootstrap',
-        '../application-create-dialog/application-create-dialog'], function(angular, bootstrap) {
+        '../application-create-dialog/application-create-dialog.js'], function(angular, bootstrap) {
 
   angular.module('application-nodata', ['cfail', 'ui.bootstrap', 'application.create']).
     controller('NodataController', ['$scope', '$modal', function($scope, $modal) {

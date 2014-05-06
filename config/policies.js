@@ -27,6 +27,11 @@ module.exports.policies = {
     'create': ['isAuthenticated', 'ensureUserId']
   },
 
+  StagedController: {
+    '*': 'isAuthenticated',
+    'create': ['isAuthenticated', 'ensureUserId']
+  },
+
   ExceptionOccurrenceController: {
     'create': true
   }

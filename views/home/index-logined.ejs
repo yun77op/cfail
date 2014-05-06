@@ -4,26 +4,27 @@
 -->
 
 <% var cfailMainComponent = generateComponent('cfail-main'); %>
+<% var currentStaged = stagedList[0]; %>
 <div id="<%- cfailMainComponent.id %>" ng-controller="MainController">
     <div class="ap-nav-local">
         <div class="container">
             <div class="dropdown pull-left ap-app-choices-wrap">
-                <a href="" class="dropdown-toggle"><%= curApp.name %></a>
+                <a href="" class="dropdown-toggle"><%= currentStaged.appName %></a>
                 <ul class="dropdown-menu">
-                    <li ng-repeat="application in applications">
-                        <a href="/app/{{application.id}}/filter-failures">{{application.name}}</a>
+                    <li ng-repeat="staged in stagedList">
+                        <a href="/app/{{staged.appId}}/filter-failures">{{application.appName}}</a>
                     </li>
                     <li><a href="" ng-click="createApplication()">创建新应用</a></li>
                 </ul>
             </div>
 
             <ul class="nav navbar-nav">
-                <li><a href="/app/{{curApp.id}}/filter-failures">Failures</a></li>
-                <li><a href="/app/{{curApp.id}}/filter-url">URLs</a></li>
-                <li class="active"><a href="/app/{{curApp.id}}/filter-user">用户</a></li>
-                <li><a href="/app/{{curApp.id}}/filter-client">浏览器</a></li>
-                <li><a href="/app/{{curApp.id}}/admin">Admin</a></li>
-                <li><a href="/app/{{curApp.id}}/report">Report</a></li>
+                <li><a href="/app/{{currentStaged.appId}}/filter-failures">Failures</a></li>
+                <li><a href="/app/{{currentStaged.appId}}/filter-url">URLs</a></li>
+                <li class="active"><a href="/app/{{currentStaged.appId}}/filter-user">用户</a></li>
+                <li><a href="/app/{{currentStaged.appId}}/filter-client">浏览器</a></li>
+                <li><a href="/app/{{currentStaged.appId}}/admin">Admin</a></li>
+                <li><a href="/app/{{currentStaged.appId}}/report">Report</a></li>
             </ul>
         </div>
     </div>
@@ -36,7 +37,6 @@
         ah.addComponentMetadata({
             moduleName: 'cfail.main',
             elementId: '<%= cfailMainComponent.id %>',
-            cfg: { applications: <%- JSON.stringify(applications) %>, curApp: <%- JSON.stringify(curApp) %> },
             deps: ['/cfail/cfail.js']
         });
     </script>

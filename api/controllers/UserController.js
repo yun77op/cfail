@@ -33,6 +33,7 @@ module.exports = {
   login: function(req, res) {
     var name = req.param('name');
     var passwd = req.param('passwd');
+
     User.findByName(name).
       done(function(err, users) {
         if (err) {
@@ -51,23 +52,63 @@ module.exports = {
 
         var user = users[0];
 
+        if (!user.emailVerified) {
+          res.send({
+            success: false,
+            error_message: 'Email is not verified'
+          });
+          return;
+        }
+
         req.session.user = _.pick(user, 'id', 'name');
         req.session.authenticated = true;
         res.redirect('/');
       });
   },
 
+  addCollaborator: function(req, res) {
+    var body = req.body;
+    var name = body.name;
+    var explicitPassword = null;
+
+    User.findOneByName(name).
+      then(function(aUser) {
+        if (aUser) return aUser;
+
+        explicitPassword = secrets.weakGenerate(8);
+
+        var user = {
+          name: name,
+          passwd: explicitPassword,
+          secret: secrets.weakGenerate(24)
+        };
+
+        return User.create(user);
+      }).
+      then(function(user) {
+        // Send verification email, carried with the generated password
+        email.sendNewUserEmail(user.name, user.secret, { explicitPassword: explicitPassword });
+
+        var staged = {
+          appName: body.appName,
+          appId: body.appId,
+          role: 'collaborator',
+          userId: user.id,
+          userName: user.name
+        };
+        return Staged.create(staged);
+      }).
+      done(function(staged) {
+        httputils.success(res, { staged: staged });
+      }, function(err) {
+        res.serverError(err);
+      });
+
+  },
+
   signup: function(req, res) {
-    var user = _.pick(req.body, 'name', 'passwd', 'role', 'appId');
-    var explicitPassword;
-
-    if (user.role === 'collaborator') {
-      explicitPassword = secrets.weakGenerate(8);
-      user.passwd = explicitPassword;
-    }
-
-    var secret = secrets.weakGenerate(24);
-    user.secret = secret;
+    var user = _.pick(req.body, 'name', 'passwd');
+    user.secret = secrets.weakGenerate(24);
 
     User.create(user).
       done(function(err, user) {
@@ -77,7 +118,7 @@ module.exports = {
         }
 
         // Send verification email
-        email.sendNewUserEmail(user.name, secret, { explicitPassword: explicitPassword });
+        email.sendNewUserEmail(user.name, user.secret);
 
         httputils.success(res, { user: user });
       });
@@ -107,7 +148,7 @@ module.exports = {
         if (!!user) {
           user.emailVerified = true;
 
-          // method model.save returns undefined, not promise
+          // method model.save returns undefined, not promise, so bad.
           var def = deferred();
           user.save(function(err, user) {
             if (err) def.reject(err);

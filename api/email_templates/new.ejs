@@ -1,5 +1,5 @@
 Thank you for using Cfail.
-<% if (explicitPassword) { %>
+<% if (typeof explicitPassword != 'undefined' && explicitPassword) { %>
 <%= format('Your password is %s', explicitPassword)%>
 <% } %>
 <%= format('Click to confirm this email address and sign in to %s', 'cfail')%>

@@ -31,21 +31,10 @@ module.exports = {
       defaultsTo: false
     },
 
-    role: {
-      type: 'STRING',
-      required: true,
-      in: ['admin', 'collaborator'],
-      defaultsTo: 'collaborator'
-    },
-
     secret: {
       type: 'STRING',
       required: true,
       unique: true
-    },
-
-    appId: {
-      type: 'STRING'
     }
   },
 

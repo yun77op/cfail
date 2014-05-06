@@ -16,6 +16,9 @@
               <% } %>
               serverTime: <%- (new Date()).getTime() %>,
               debug: <%- appDebug %>
+              <% if (typeof stagedList != 'undefined') { %>
+              , stagedList: <%- JSON.stringify(stagedList) %>
+              <% } %>
           });
           <% if (typeof measureDomLoading != 'undefined') { %>
               try {

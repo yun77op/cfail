@@ -1,5 +1,5 @@
 /**
- * MainController
+ * StagedController
  *
  * @module      :: Controller
  * @description	:: A set of functions called `actions`.
@@ -15,6 +15,8 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+var httputils = require('../../lib/httputils');
+
 module.exports = {
     
   
@@ -22,38 +24,18 @@ module.exports = {
 
   /**
    * Overrides for the settings in `config/controllers.js`
-   * (specific to MainController)
+   * (specific to StagedController)
    */
-  _config: {},
+  _config: {
 
-  index: function(req, res) {
-    if (!req.session.authenticated) {
-      res.view('home/index');
-      return;
-    }
+  },
 
 
-    var render = function(stagedList) {
-      var viewPath;
-      var ctx = {};
-
-      if (stagedList.length == 0) {
-        viewPath = 'home/index-logined-default';
-      } else {
-        viewPath = 'home/index-logined';
-        ctx.stagedList = stagedList;
-      }
-
-      res.view(viewPath, ctx);
-    };
-
-    Staged.findByUserId(req.session.user.id).
+  getCollaboratorsByAppId: function(req, res) {
+    Staged.find({ appId: req.query.appId, role: 'collaborator'}).
       done(function(err, stagedList) {
-        if (err) return res.send(err, 500);
-
-        render(stagedList);
+        if (err) return res.serverError(err);
+        return httputils.success(res, { stagedList: stagedList });
       });
   }
-
-  
 };

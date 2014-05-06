@@ -1,4 +1,5 @@
 define(['angular',
+        'ap.config',
         'angular.route',
         'filter/filter-user/filter-user',
         'filter/filter-url/filter-url',
@@ -7,7 +8,7 @@ define(['angular',
         'exception/exception',
         'admin/admin',
         'report/report',
-        'application/application-create-dialog/application-create-dialog'], function(angular) {
+        'application/application-create-dialog/application-create-dialog'], function(angular, config) {
 
   var deps = ['cfail',
               'ngRoute',
@@ -57,9 +58,9 @@ define(['angular',
 
       $locationProvider.html5Mode(true);
     }]).
-    controller('MainController', ['$scope', 'componentMetadata', '$modal', function($scope, componentMetadata, $modal) {
-      $scope.applications = componentMetadata.applications;
-      $scope.curApp = componentMetadata.curApp;
+    controller('MainController', ['$scope', '$modal', function($scope, $modal) {
+      $scope.stagedList = config.stagedList;
+      $scope.currentStaged = config.stagedList[0];
 
       $scope.createApplication = function() {
         var modal = $modal.open({

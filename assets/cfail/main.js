@@ -8,7 +8,8 @@ require.config({
     'text': '../../components/requirejs-text/text',
     'jquery': '../../components/jquery/jquery',
     'highcharts': '../../components/highcharts/highcharts.src',
-    'angular.hightcharts': '../../components/highcharts-ng/dist/highcharts-ng'
+    'angular.hightcharts': '../../components/highcharts-ng/dist/highcharts-ng',
+    '_': '/components/lodash/dist/lodash'
   },
 
   shim: {
@@ -16,7 +17,8 @@ require.config({
     'angular.route': ['angular'],
     'angular.bootstrap': ['angular'],
     'highcharts': ['jquery'],
-    'angular.hightcharts': ['highcharts']
+    'angular.hightcharts': ['highcharts'],
+    '_': {'exports': '_'}
   }
 });
 
