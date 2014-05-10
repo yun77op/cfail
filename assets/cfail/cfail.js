@@ -58,17 +58,25 @@ define(['angular',
 
       $locationProvider.html5Mode(true);
     }]).
-    controller('MainController', ['$scope', '$modal', function($scope, $modal) {
-      $scope.stagedList = config.stagedList;
-      $scope.currentStaged = config.stagedList[0];
+    controller('MainController', ['$scope', '$modal', '$rootScope', '$routeParams', '$location',
+      function($scope, $modal, $rootScope, $routeParams, $location) {
+        $scope.stagedList = config.stagedList;
+        $scope.currentStaged = config.stagedList[0];
 
-      $scope.createApplication = function() {
-        var modal = $modal.open({
-          templateUrl: '/cfail/application/application-create-dialog/application-create-dialog.html',
-          controller: 'ApplicationCreateController',
-          keyboard: true
+        $scope.createApplication = function() {
+          var modal = $modal.open({
+            templateUrl: '/cfail/application/application-create-dialog/application-create-dialog.html',
+            controller: 'ApplicationCreateController',
+            keyboard: true
+          });
+        };
+
+        $rootScope.$on('$routeChangeSuccess', function(e) {
+          if (!$routeParams.appId) return;
+
+          var activeNavItem = $location.path().split('/').pop();
+          $scope.activeNavItem = activeNavItem;
         });
-      };
-    }]);
+      }]);
 
 });

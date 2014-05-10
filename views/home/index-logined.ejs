@@ -19,12 +19,12 @@
             </div>
 
             <ul class="nav navbar-nav">
-                <li><a href="/app/{{currentStaged.appId}}/filter-failures">Failures</a></li>
-                <li><a href="/app/{{currentStaged.appId}}/filter-url">URLs</a></li>
-                <li class="active"><a href="/app/{{currentStaged.appId}}/filter-user">用户</a></li>
-                <li><a href="/app/{{currentStaged.appId}}/filter-client">浏览器</a></li>
-                <li><a href="/app/{{currentStaged.appId}}/admin">Admin</a></li>
-                <li><a href="/app/{{currentStaged.appId}}/report">Report</a></li>
+                <li ng-class="{active: activeNavItem === 'filter-failures'}"><a href="/app/{{currentStaged.appId}}/filter-failures">Failures</a></li>
+                <li ng-class="{active: activeNavItem === 'filter-url'}"><a href="/app/{{currentStaged.appId}}/filter-url">URLs</a></li>
+                <li ng-class="{active: activeNavItem === 'filter-user'}"><a href="/app/{{currentStaged.appId}}/filter-user">用户</a></li>
+                <li ng-class="{active: activeNavItem === 'filter-client'}"><a href="/app/{{currentStaged.appId}}/filter-client">浏览器</a></li>
+                <li ng-class="{active: activeNavItem === 'admin'}"><a href="/app/{{currentStaged.appId}}/admin">Admin</a></li>
+                <li ng-class="{active: activeNavItem === 'report'}"><a href="/app/{{currentStaged.appId}}/report">Report</a></li>
             </ul>
         </div>
     </div>
