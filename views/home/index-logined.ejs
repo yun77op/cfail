@@ -12,7 +12,7 @@
                 <a href="" class="dropdown-toggle"><%= currentStaged.appName %></a>
                 <ul class="dropdown-menu">
                     <li ng-repeat="staged in stagedList">
-                        <a href="/app/{{staged.appId}}/filter-failures">{{application.appName}}</a>
+                        <a href="/app/{{staged.appId}}/filter-failures">{{staged.appName}}</a>
                     </li>
                     <li><a href="" ng-click="createApplication()">创建新应用</a></li>
                 </ul>
@@ -23,8 +23,8 @@
                 <li ng-class="{active: activeNavItem === 'filter-url'}"><a href="/app/{{currentStaged.appId}}/filter-url">URLs</a></li>
                 <li ng-class="{active: activeNavItem === 'filter-user'}"><a href="/app/{{currentStaged.appId}}/filter-user">用户</a></li>
                 <li ng-class="{active: activeNavItem === 'filter-client'}"><a href="/app/{{currentStaged.appId}}/filter-client">浏览器</a></li>
-                <li ng-class="{active: activeNavItem === 'admin'}"><a href="/app/{{currentStaged.appId}}/admin">Admin</a></li>
-                <li ng-class="{active: activeNavItem === 'report'}"><a href="/app/{{currentStaged.appId}}/report">Report</a></li>
+                <li ng-hide="currentStaged.role == 'collaborator'" ng-class="{active: activeNavItem === 'admin'}"><a href="/app/{{currentStaged.appId}}/admin">Admin</a></li>
+                <li ng-hide="currentStaged.role == 'collaborator'" ng-class="{active: activeNavItem === 'report'}"><a href="/app/{{currentStaged.appId}}/report">Report</a></li>
             </ul>
         </div>
     </div>

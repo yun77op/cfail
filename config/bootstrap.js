@@ -10,6 +10,7 @@
 
 const
   crypto = require('crypto');
+  email = require('../lib/mail');
 
 module.exports.bootstrap = function (cb) {
 
@@ -46,6 +47,14 @@ module.exports.bootstrap = function (cb) {
   };
 
   app.locals.appDebug = sails.config.environment == 'development';
+
+
+  // set email service config
+  email.setConfig({
+    log: sails.log,
+    email_to_console: sails.config.email_to_console,
+    localAppUrl: sails.localAppUrl
+  });
 
   cb();
 };
