@@ -13,7 +13,7 @@ var generateRandomExceptionOccurrences = function(number) {
             at eval (eval at <anonymous> (/usr/local/lib/node_modules/sails/node_modules/ejs/lib/ejs.js:236:14), <anonymous>:29:622)'],
     type: ['javascript', 'nodejs', 'java', 'python', 'lisp'],
     username: ['anonymous', 'yun77op', 'testlink', 'zhte', 'xman'],
-    appId: ['53523f4fe15cb164149d2ef4'],
+    appId: ['53684d9067b4160000d778d4'],
     path: ['/', '/forbidden', '/user/name', 'wrong/place', 'kidding'],
     agent: ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:28.0) Gecko/20100101 Firefox/28.0',

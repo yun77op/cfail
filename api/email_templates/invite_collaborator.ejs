@@ -1,0 +1,13 @@
+Hi! <%= name %>
+
+<%= format('%s invites you to Cfail as a collaborator on the project %s', inviter, appName) %>
+
+<% if (explicitPassword) { %>
+<%= format('Your password is %s', explicitPassword)%>
+
+<%= format('Click to confirm this email address and sign in to %s', 'cfail')%>
+<%= link %>
+<% } %>
+
+Thank you,
+Cfail

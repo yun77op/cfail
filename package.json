@@ -25,7 +25,8 @@
     "karma-phantomjs-launcher‎": "0.1.4",
     "karma-jasmine": "~0.1.5",
     "requirejs": "~2.1.11",
-    "karma-requirejs": "~0.2.1"
+    "karma-requirejs": "~0.2.1",
+    "vows": "~0.7.0"
   },
   "scripts": {
     "postinstall": "bower install",

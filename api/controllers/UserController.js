@@ -86,8 +86,15 @@ module.exports = {
         return User.create(user);
       }).
       then(function(user) {
+
         // Send verification email, carried with the generated password
-        email.sendNewUserEmail(user.name, user.secret, { explicitPassword: explicitPassword });
+        var locals = {
+          explicitPassword: explicitPassword,
+          inviter: req.session.user.name,
+          name: user.name,
+          appName: body.appName
+        };
+        email.sendInviteCollaboratorEmail(user.name, user.secret, locals);
 
         var staged = {
           appName: body.appName,

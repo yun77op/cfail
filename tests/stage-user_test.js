@@ -47,7 +47,6 @@ suite.addBatch({
   }
 });
 
-
 // run or export the suite.
 if (process.argv[1] === __filename) suite.run();
 else suite.export(module);
