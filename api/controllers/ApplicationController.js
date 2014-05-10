@@ -25,4 +25,5 @@ module.exports = {
    * (specific to ApplicationController)
    */
   _config: {}
+
 };

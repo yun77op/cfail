@@ -17,6 +17,10 @@ module.exports = {
     userId: {
       type: 'STRING',
       required: true
+    },
+
+    reportFailureEmail: {
+      type: 'email'
     }
   }
 

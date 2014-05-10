@@ -20,6 +20,33 @@ define(['angular', 'ap.config'], function(angular, gconfig) {
           };
           config.data.userName = gconfig.user.name;
           return $http(config);
+        },
+
+        getAllEmails: function(id) {
+          var config = {
+            method: 'get',
+            url: '/staged/getAllEmailsByAppId',
+            params: { appId: id }
+          };
+          return $http(config);
+        },
+
+
+        updateApplicationProps: function(id, props) {
+          var config = {
+            method: 'put',
+            url: '/application/update/' + id,
+            data: props
+          };
+          return $http(config);
+        },
+
+        getApplication: function(id) {
+          var config = {
+            method: 'get',
+            url: '/application/find/' + id
+          };
+          return $http(config);
         }
       }
     }]);

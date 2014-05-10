@@ -37,5 +37,13 @@ module.exports = {
         if (err) return res.serverError(err);
         return httputils.success(res, { stagedList: stagedList });
       });
+  },
+
+  getAllEmailsByAppId: function(req, res) {
+    Staged.find({ appId: req.query.appId}).
+      done(function(err, stagedList) {
+        if (err) return res.serverError(err);
+        return httputils.success(res, { stagedList: stagedList });
+      });
   }
 };

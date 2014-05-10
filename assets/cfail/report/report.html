@@ -1,9 +1,12 @@
 <div>
-  <h2>Report regressions</h2>
+  <h2>Report failure</h2>
   <div>
-    <label for="">Email To:</label>
-    <select name="" id="">
-      <option value="">hzjsd@corp.com</option>
+    <label for="ap-report-failure-select">Email To:</label>
+    <select name="reportFailureEmail" id="ap-report-failure-select"
+            ng-model="reportFailureEmail"
+            ng-options="staged.userName for staged in stagedList"
+            ng-change="changeReportFailureEmail(reportFailureEmail)">
+      <option value="">-- Not chosen --</option>
     </select>
   </div>
 </div>
