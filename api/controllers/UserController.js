@@ -127,14 +127,21 @@ module.exports = {
     User.create(user).
       done(function(err, user) {
         if (err) {
-          res.serverError(err);
+          res.send({
+            success: false,
+            error: err
+          });
           return;
         }
 
         // Send verification email
         email.sendNewUserEmail(user.name, user.secret);
 
-        httputils.success(res, { user: user });
+        if (req.wantsJSON) {
+          httputils.success(res, { user: user });
+        } else {
+          res.redirect('/login');
+        }
       });
   },
 
