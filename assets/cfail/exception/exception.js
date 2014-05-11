@@ -6,22 +6,21 @@ define(['angular', 'text!./exception.html', './exception_service', 'angular.boot
     }]).
     controller('ExceptionController', ['$scope', 'exceptionService', function($scope, exceptionService) {
 
-      exceptionService.getException().
-        success(function(data) {
-          $scope.exception = data;
-        });
+      $scope.exception = exceptionService.get();
 
       $scope.exceptionOccurrenceTemplateUrl = '';
 
       $scope.showOccurrences = function() {
         if (!$scope.exception) return;
 
-        exceptionService.getExceptionOccurrencs().
-          success(function(data) {
-            $scope.occurrences = data;
-          });
-
+        $scope.occurrences = exceptionService.getExceptionOccurrencs();
         $scope.exceptionOccurrenceTemplateUrl = '/cfail/exception/exception-occurrences.html';
+      };
+
+
+      $scope.setFixed = function() {
+        $scope.exception.status = 'fixed';
+        $scope.exception.$save();
       };
     }]);
 });

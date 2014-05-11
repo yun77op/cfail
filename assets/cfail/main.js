@@ -9,12 +9,14 @@ require.config({
     'jquery': '../../components/jquery/jquery',
     'highcharts': '../../components/highcharts/highcharts.src',
     'angular.hightcharts': '../../components/highcharts-ng/dist/highcharts-ng',
-    '_': '/components/lodash/dist/lodash'
+    '_': '/components/lodash/dist/lodash',
+    'angular.resources': '/components/angular-resource/angular-resource'
   },
 
   shim: {
     'angular': {'exports': 'angular'},
     'angular.route': ['angular'],
+    'angular.resources': ['angular'],
     'angular.bootstrap': ['angular'],
     'highcharts': ['jquery'],
     'angular.hightcharts': ['highcharts'],

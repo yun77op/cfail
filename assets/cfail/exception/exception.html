@@ -4,16 +4,23 @@
       <h1>{{exception.name}} failure</h1>
     </div>
     <div class="col-md-6">
-      <div>状态: {{exception.status}}</div>
-      <div>错误首次发生于: {{exception.createdAt}}</div>
+      <div class="ap-exception-summery">
+        <div>状态: {{exception.status}}</div>
+        <div>错误首次发生于: {{exception.createdAt}}</div>
+      </div>
+      <div class="ap-exception-actions">
+        <button ng-hide="exception.status == 'fixed'" ng-click="setFixed(exception.id)" class="btn btn-primary">Set fixed</button>
+      </div>
     </div>
   </div>
 
   <div>
     <tabset>
       <tab heading="详情">
-        <h3>STACK TRACE</h3>
-        <pre class="stack-trace">{{exception.stack}}</pre>
+        <div class="ap-exception-detail">
+          <h3>类型</h3>
+          <div>{{exception.type}}</div>
+        </div>
       </tab>
       <tab heading="历史记录" select="showOccurrences()">
         <div ng-include="exceptionOccurrenceTemplateUrl"></div>

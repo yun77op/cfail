@@ -1,26 +1,16 @@
-define(['angular'], function(angular) {
+define(['angular', 'angular.resources'], function(angular) {
 
-  angular.module('cfail.exception.service', []).
-    factory('exceptionService', ['$http', '$routeParams', function($http, $routeParams) {
-      return {
-        getException: function() {
-          var config = {
-            method: 'get',
-            url: '/exception',
-            params: { id: $routeParams.exceptionId }
-          };
-          return $http(config);
+  angular.module('cfail.exception.service', ['ngResource']).
+    factory('exceptionService', ['$http', '$routeParams', '$resource', function($http, $routeParams, $resource) {
+      return $resource('/exception', { id: $routeParams.exceptionId }, {
+        get: {method:'get', isArray:false},
+        getExceptionOccurrencs: {
+          method: 'get',
+          isArray: true,
+          url: '/exceptionOccurrence',
+          params: { skip: 0, limit: 10, exceptionId: $routeParams.exceptionId, id: null }
         },
-
-        getExceptionOccurrencs: function(params) {
-          params = angular.extend({ skip: 0, limit: 10, exceptionId: $routeParams.exceptionId }, params);
-          var config = {
-            method: 'get',
-            url: '/exceptionOccurrence',
-            params: params
-          };
-          return $http(config);
-        }
-      }
+        save: {method: 'put', isArray: false, data: {}}
+      });
     }]);
 });
