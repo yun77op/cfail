@@ -18,3 +18,7 @@
 .navbar-nav li.active a {
     background: #eee;
 }
+
+.phui-error {
+    color: red;
+}

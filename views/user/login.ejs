@@ -1,18 +1,33 @@
 <div class="container">
     <div class="row">
         <div class="col-md-push-3 col-md-6">
-            <form role="form" action="/login" method="post">
-                <input type="hidden" name="_csrf" value="<%= _csrf %>">
-                <div class="form-group">
-                    <label for="loginInputUsername">用户名</label>
-                    <input type="text" class="form-control" id="loginInputUsername" placeholder="请输入用户" required name="name">
-                </div>
-                <div class="form-group">
-                    <label for="loginInputPasswd">密码</label>
-                    <input type="password" class="form-control" id="loginInputpasswd" placeholder="请输入密码" required name="passwd">
-                </div>
-                <button type="submit" class="btn btn-default">登录</button>
+            <% var loginComponent = generateComponent('ap-login'); %>
+            <form role="form" action="/login" method="post" id="<%= loginComponent.id %>" ng-submit="submit($event)" ng-controller="LoginController">
+                <fieldset>
+                    <legend>登录</legend>
+                    <input type="hidden" name="_csrf" value="<%= _csrf %>">
+
+                    <div ng-show="error_message" class="phui-error" ng-bind="error_message"></div>
+
+                    <div class="form-group">
+                        <label for="loginInputUsername">用户名</label>
+                        <input type="email" class="form-control" id="loginInputUsername" placeholder="请输入用户" required name="name" ng-model="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginInputPasswd">密码</label>
+                        <input type="password" class="form-control" id="loginInputPasswd" placeholder="请输入密码" required name="passwd" ng-model="passwd">
+                    </div>
+                    <button type="submit" class="btn btn-primary">登录</button>
+                </fieldset>
             </form>
+
+            <script>
+                ah.addComponentMetadata({
+                    moduleName: 'cfail.login',
+                    elementId: '<%= loginComponent.id %>',
+                    deps: ['/cfail/components/login/login.js']
+                });
+            </script>
         </div>
     </div>
 </div>

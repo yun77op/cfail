@@ -15,6 +15,15 @@ define(['angular'], function(angular) {
             });
         },
 
+        login: function(data) {
+          var config = {
+            method: 'post',
+            url: '/login',
+            data: data
+          };
+          return $http(config);
+        },
+
         addCollaborator: function(data) {
           var config = {
             method: 'post',

@@ -35,12 +35,24 @@ module.exports = {
       type: 'STRING',
       required: true,
       unique: true
+    },
+
+    authenticate: function(password, cb) {
+      var hashedPassword = this.passwd;
+      User.encrypt(password, function(err, hash) {
+        if (err) return cb(err);
+        cb(null, hashedPassword === hash);
+      });
     }
+  },
+
+  encrypt: function(password, cb) {
+    bcrypt.hash(password, 10, cb);
   },
 
   // Lifecycle Callbacks
   beforeCreate: function(values, next) {
-    bcrypt.hash(values.passwd, 10, function(err, hash) {
+    User.encrypt(values.passwd, function(err, hash) {
       if(err) return next(err);
       values.passwd = hash;
       next();

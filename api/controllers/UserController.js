@@ -31,26 +31,21 @@ module.exports = {
 
 
   login: function(req, res) {
-    var name = req.param('name');
-    var passwd = req.param('passwd');
+    var body = req.body;
+    var name = body.name;
 
-    User.findByName(name).
-      done(function(err, users) {
-        if (err) {
-          res.send(err, 500);
-          return;
-        }
+    User.findOneByName(name).
+      done(function(err, user) {
+        if (err) return res.serverError(err);
 
-        if (users.length == 0) {
+        if (!user) {
           res.send({
             success: false,
             error_code: -1,
-            error_message: 'User is not validated'
+            error_message: 'User is not found'
           });
           return;
         }
-
-        var user = users[0];
 
         if (!user.emailVerified) {
           res.send({
@@ -60,9 +55,21 @@ module.exports = {
           return;
         }
 
-        req.session.user = _.pick(user, 'id', 'name');
-        req.session.authenticated = true;
-        res.redirect('/');
+        user.authenticate(body.passwd, function(err, authenticted) {
+          if (err) return res.serverError(err);
+
+          if (!authenticted) {
+            res.send({
+              success: false,
+              error_message: 'Username does not match password'
+            });
+            return;
+          }
+
+          req.session.user = _.pick(user, 'id', 'name');
+          req.session.authenticated = true;
+          httputils.success(res);
+        });
       });
   },
 
