@@ -54,7 +54,5 @@ module.exports = {
 
   environment: process.env.NODE_ENV || 'development',
 
-  email_to_console: false,
-
-  appName: 'Cfail'
+  email_to_console: false
 };

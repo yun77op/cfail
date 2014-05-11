@@ -24,6 +24,15 @@ define(['angular'], function(angular) {
           return $http(config);
         },
 
+        signup: function(data) {
+          var config = {
+            method: 'post',
+            url: '/signup',
+            data: data
+          };
+          return $http(config);
+        },
+
         addCollaborator: function(data) {
           var config = {
             method: 'post',

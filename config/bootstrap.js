@@ -53,7 +53,7 @@ module.exports.bootstrap = function (cb) {
   email.setConfig({
     log: sails.log,
     email_to_console: sails.config.email_to_console,
-    localAppUrl: sails.localAppUrl
+    localAppURL: sails.localAppURL
   });
 
   cb();
