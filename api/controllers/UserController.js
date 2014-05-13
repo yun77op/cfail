@@ -142,6 +142,11 @@ module.exports = {
         } else {
           res.redirect('/login');
         }
+        if (req.wantsJSON) {
+          httputils.success(res, { user: user });
+        } else {
+          res.redirect('/login');
+        }
       });
   },
 
