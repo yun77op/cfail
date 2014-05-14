@@ -19,7 +19,8 @@ module.exports.policies = {
   '*': 'isAuthenticated',
 
   UserController: {
-    '*': true
+    '*': true,
+    'changePassword': ['isAuthenticated', 'ensureUserId']
   },
 
   ApplicationController: {

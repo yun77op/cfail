@@ -166,6 +166,30 @@ module.exports = {
       });
   },
 
+  changePassword: function(req, res) {
+    var body = req.body;
+
+    User.findOne(body.userId).
+      then(function(user) {
+        user.authenticate(body.password, function(err, authenticated) {
+          if (err) return res.serverError(err);
+          if (!authenticated) {
+            return httputils.error(res, 'Password is not correct');
+          }
+
+          user.passwd = body.newPassword;
+
+          user.save(function(err, user) {
+            if (err) return res.serverError(err);
+
+            httputils.success(res, { user: user });
+          });
+        });
+      }, function(err) {
+        res.serverError(err);
+      });
+  },
+
   verify_email_address: function(req, res) {
     var token = req.query.token;
 

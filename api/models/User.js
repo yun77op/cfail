@@ -8,6 +8,14 @@
 
 var bcrypt = require('bcrypt');
 
+var encryptPassword = function(values, next) {
+  bcrypt.hash(values.passwd, 10, function(err, hash) {
+    if(err) return next(err);
+    values.passwd = hash;
+    next();
+  });
+};
+
 module.exports = {
 
   autoPK: true,
@@ -43,12 +51,8 @@ module.exports = {
   },
 
   // Lifecycle Callbacks
-  beforeCreate: function(values, next) {
-    bcrypt.hash(values.passwd, 10, function(err, hash) {
-      if(err) return next(err);
-      values.passwd = hash;
-      next();
-    });
-  }
+  beforeCreate: encryptPassword,
+
+  beforeUpdate: encryptPassword
 
 };

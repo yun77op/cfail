@@ -74,6 +74,7 @@
             <a href="../" class="navbar-brand">Cfail</a>
             <ul class="nav navbar-nav navbar-right">
                 <% if (typeof authenticated != 'undefined' && authenticated) { %>
+                    <li><a href="/settings">设置</a></li>
                     <li><a href="" ng-click="signout()">退出</a></li>
                 <% } else { %>
                     <li><a href="/login">登录</a></li>

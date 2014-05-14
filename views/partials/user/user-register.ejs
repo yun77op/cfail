@@ -1,0 +1,30 @@
+<% var userRegisterComponent = generateComponent('ap-signup'); %>
+
+<form role="form" name="signupForm" ng-cloak method="post" action="/signup" ng-submit="submit($event)" id="<%= userRegisterComponent.id %>" ng-controller="RegisterController">
+    <fieldset>
+        <legend>注册</legend>
+        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+        <div ng-show="error" class="phui-error-wrap">
+            <div class="phui-error">{{error.err}}</div>
+        </div>
+
+        <div class="form-group">
+            <input type="email" class="form-control" id="loginInputUsername" placeholder="用户名" required name="name" ng-model="name">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="loginInputPasswd" placeholder="密码" required name="passwd" ng-model="passwd" ng-minlength="6">
+            <div class="phui-error-wrap" ng-show="signupForm.passwd.$dirty && signupForm.passwd.$invalid">
+                <div class="phui-error" ng-show="signupForm.passwd.$error.minlength">最少6个字符</div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" ng-disabled="signupForm.$invalid">注册</button>
+    </fieldset>
+</form>
+
+<script>
+    ah.addComponentMetadata({
+        moduleName: 'cfail.register',
+        elementId: '<%= userRegisterComponent.id %>',
+        deps: ['/cfail/components/user/user-register.js']
+    });
+</script>

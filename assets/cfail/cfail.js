@@ -8,6 +8,7 @@ define(['angular',
         'exception/exception',
         'admin/admin',
         'report/report',
+        'settings/settings',
         'application/application-create-dialog/application-create-dialog'], function(angular, config) {
 
   var deps = ['cfail',
@@ -19,6 +20,7 @@ define(['angular',
               'cfail.exception',
               'cfail.admin',
               'cfail.report',
+              'cfail.settings',
               'application.create',
               'ui.bootstrap'];
   angular.module('cfail.main', deps).
@@ -51,6 +53,10 @@ define(['angular',
         when('/app/failure/:exceptionId', {
           templateUrl: '/cfail/exception/exception.html',
           controller: 'ExceptionController'
+        }).
+        when('/settings', {
+          templateUrl: '/cfail/settings/settings.html',
+          controller: 'SettingsController'
         }).
         otherwise({
           redirectTo: '/'

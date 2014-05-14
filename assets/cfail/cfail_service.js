@@ -33,6 +33,21 @@ define(['angular'], function(angular) {
           return $http(config);
         },
 
+        changePassword: function(data) {
+          var config = {
+            method: 'post',
+            url: '/user/changePassword',
+            data: data
+          };
+          var req = $http(config);
+
+          req.then(function(resp) {
+            return resp.data;
+          });
+
+          return req;
+        },
+
         addCollaborator: function(data) {
           var config = {
             method: 'post',

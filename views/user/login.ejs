@@ -3,10 +3,8 @@
         <div class="col-md-push-3 col-md-6">
             <% var loginComponent = generateComponent('ap-login'); %>
             <form role="form" action="/login" method="post" id="<%= loginComponent.id %>" ng-submit="submit($event)" ng-controller="LoginController">
+                <legend>登录</legend>
                 <fieldset>
-                    <legend>登录</legend>
-                    <input type="hidden" name="_csrf" value="<%= _csrf %>">
-
                     <div ng-show="error_message" class="phui-error" ng-bind="error_message"></div>
 
                     <div class="form-group">

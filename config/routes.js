@@ -47,7 +47,10 @@ module.exports.routes = {
 
   'post /signout': 'UserController.signout',
 
-  'get /app/*': 'MainController.index'
+  'get /app/*': 'MainController.index',
+
+  'get /settings': 'MainController.index'
+
 
 
   /*
