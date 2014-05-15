@@ -1,19 +1,8 @@
-<div>
-  <h2>协作者</h2>
-  <ul class="ap-collaborator-list-view">
-    <li ng-repeat="collaborator in collaborators" class="ap-collaborator-list-item">
-      <span class="">{{collaborator.userName}}</span>
-      <button type="button" class="btn btn-default btn-sm remove-btn" ng-click="removeCollaborator(collaborator.id)">
-        <span class="glyphicon glyphicon-remove"></span>
-      </button>
-    </li>
-  </ul>
+<ul class="nav nav-tabs">
+  <li ng-class="{active: subsection == 'collaborator'}"><a href="/app/{{appId}}/admin/collaborator">协作者</a></li>
+  <li ng-class="{active: subsection == 'integration'}"><a href="/app/{{appId}}/admin/integration">集成</a></li>
+</ul>
 
-  <form class="form-inline" method="post" ng-submit="submit($event)" name="collaborator-form">
-    <div class="form-group">
-      <label for="" class="sr-only"></label>
-      <input type="email" class="form-control" placeholder="Email" name="email" ng-model="email" required>
-    </div>
-    <input type="submit" class="btn btn-default btn-primary">
-  </form>
+<div class="tab-content">
+  <div class="tab-panel" subsection="{{subsection}}">sdf</div>
 </div>

@@ -8,6 +8,7 @@
       <script>
           define('ap.config', [], {
               csrfToken: '<%- _csrf %>',
+              baseUrl: "<%- baseUrl %>",
               <% if (typeof authenticated != 'undefined') { %>
                 <% if (authenticated) { %>
                     user: <%- JSON.stringify(user) %>,

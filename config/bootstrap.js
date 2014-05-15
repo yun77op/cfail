@@ -47,6 +47,7 @@ module.exports.bootstrap = function (cb) {
   };
 
   app.locals.appDebug = sails.config.environment == 'development';
+  app.locals.baseUrl = sails.localAppURL;
 
 
   // set email service config

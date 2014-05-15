@@ -1,39 +1,27 @@
-define(['angular','_', 'ap.config', 'angular.bootstrap', '/cfail/cfail_service.js'], function(angular, _, config) {
+define(['angular','_', 'ap.config', 'angular.bootstrap', '/cfail/cfail_service.js',
+        './admin-collaborator/admin-collaborator',
+        './admin-integration/admin-integration'], function(angular, _, config) {
 
-  angular.module('cfail.admin', ['cfail', 'ui.bootstrap', 'cfail.service']).
-    controller('AdminController', ['$scope', 'cfailService', '$routeParams', function($scope, cfailService, $routeParams) {
+  angular.module('cfail.admin', ['cfail', 'ui.bootstrap', 'cfail.service', 'cfail.admin.collaborator', 'cfail.admin.integration']).
+    controller('AdminController', ['$scope', 'cfailService', '$routeParams', '$compile', function($scope, cfailService, $routeParams, $compile) {
+      var subsection = $routeParams.subsection || 'collaborator';
 
-      $scope.collaborators = [];
+      $scope.appId = $routeParams.appId;
+      $scope.subsection = subsection;
+    }]).
+    directive('subsection', ['cfailService', '$routeParams', '$compile', function(cfailService, $routeParams, $compile) {
+      return {
+        scope: {},
+        replace: true,
+        template: '<div></div>',
+        restrict: 'EA',
+        link: function($scope, element, attrs) {
+          var directive = 'admin-' + attrs.subsection;
+          var html = '<' + directive + '><' + directive + '/>';
 
-      $scope.submit = function(e) {
-        e.preventDefault();
-
-        var appId = $routeParams.appId;
-        var staged = _.find(config.stagedList, function(staged) {
-          return staged.appId === appId;
-        });
-
-        cfailService.addCollaborator({
-          name: $scope.email,
-          appId: appId,
-          appName: staged.appName
-        }).success(function(data) {
-            $scope.email = '';
-            $scope.collaborators.push(data.staged);
-          });
-      };
-
-      $scope.removeCollaborator = function(collaboratorId) {
-        cfailService.destroyStage(collaboratorId).
-          success(function(data) {
-            $scope.collaborators = _.reject($scope.collaborators, function(collaborator) { return collaborator.id === collaboratorId });
-          });
-      };
-
-
-      cfailService.getCollaboratorsByAppId($routeParams.appId).
-        success(function(data) {
-          $scope.collaborators = $scope.collaborators.concat(data.stagedList);
-        });
+          var el = $compile(html)($scope);
+          element.append(el);
+        }
+      }
     }]);
 });

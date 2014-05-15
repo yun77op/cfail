@@ -42,7 +42,7 @@ define(['angular',
           templateUrl: '/cfail/filter/filter-client/filter-client.html',
           controller: 'FilterClientController'
         }).
-        when('/app/:appId/admin', {
+        when('/app/:appId/admin/:subsection?', {
           templateUrl: '/cfail/admin/admin.html',
           controller: 'AdminController'
         }).
