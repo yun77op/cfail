@@ -2,13 +2,13 @@ require.config({
   baseUrl: '/cfail',
 
   paths: {
-    'angular': '../../components/angular/angular',
-    'angular.route': '../../components/angular-route/angular-route',
-    'angular.bootstrap': '../../components/angular-bootstrap/ui-bootstrap-tpls',
-    'text': '../../components/requirejs-text/text',
-    'jquery': '../../components/jquery/jquery',
-    'highcharts': '../../components/highcharts/highcharts.src',
-    'angular.hightcharts': '../../components/highcharts-ng/dist/highcharts-ng',
+    'angular': '/components/angular/angular',
+    'angular.route': '/components/angular-route/angular-route',
+    'angular.bootstrap': '/components/angular-bootstrap/ui-bootstrap-tpls',
+    'text': '/components/requirejs-text/text',
+    'jquery': '/components/jquery/jquery',
+    'highcharts': '/components/highcharts/highcharts.src',
+    'angular.hightcharts': '/components/highcharts-ng/dist/highcharts-ng',
     '_': '/components/lodash/dist/lodash',
     'angular.resources': '/components/angular-resource/angular-resource'
   },
