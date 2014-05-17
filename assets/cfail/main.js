@@ -2,7 +2,7 @@ require.config({
   baseUrl: '/cfail',
 
   paths: {
-    'angular': '/components/angular/angular',
+    'angular': 'http://cdn.staticfile.org/angular.js/1.2.6/angular.min',
     'angular.route': '/components/angular-route/angular-route',
     'angular.bootstrap': '/components/angular-bootstrap/ui-bootstrap-tpls',
     'text': '/components/requirejs-text/text',
