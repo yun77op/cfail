@@ -14,17 +14,13 @@
 
 module.exports.adapters = {
 
-  // If you leave the adapter config unspecified 
+  // If you leave the adapter config unspecified
   // in a model definition, 'default' will be used.
   'default': 'mongo',
 
-  mongo: {
+  'mongo': {
     module: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    user: 'cfail',
-    password: 'cfail',
-    database: 'cfail',
+    url: process.env.MONGOLAB_URI || 'mongodb://cfail:cfail@localhost:27017/cfail',
     schema: true
   },
 

@@ -44,7 +44,9 @@ module.exports.session = {
   username: 'cfail',
   password: 'cfail',
   auto_reconnect: true,
-  ssl: false
+  ssl: false,
+
+  url: process.env.MONGOLAB_URI || 'mongodb://cfail:cfail@localhost:27017/cfail'
 
   // Optional Values:
   //

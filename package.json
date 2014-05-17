@@ -13,7 +13,6 @@
     "lodash": "2.3.0",
     "deferred": "~0.7.0",
     "ua-parser": "~0.3.3",
-    "mongodb": "~1.4.1",
     "moment": "~2.6.0",
     "nodemailer": "~0.6.3",
     "ejs": "~1.0.0"
@@ -36,9 +35,9 @@
     "test_frontend": "./node_modules/karma/bin/karma start tests/karma.conf.js"
   },
   "main": "app.js",
-  "repository": "",
-  "author": "",
-  "license": "",
+  "repository": "https://github.com/yun77op/cfail",
+  "author": "Yunhu Jiang",
+  "license": "MIT",
   "engines": {
     "node": "0.10.18"
   }
