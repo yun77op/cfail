@@ -8,17 +8,3 @@
 
 [Ansible]: http://www.ansible.com/
 [Concrete]: https://github.com/ryankee/concrete
-
-## 开始使用
-
-### CI服务器配置
-
-    ansible-playbook -i deployment/hosts -u vagrant -K deployment/ci.yml
-
-### Provision to staging servers
-
-    ansible-playbook -i deployment/hosts -u vagrant -K -l webservers_staging deployment/provision.yml
-
-### Deploy to staging servers
-
-    ansible-playbook -i deployment/hosts -u vagrant -K -l webservers_staging deployment/deploy.yml
