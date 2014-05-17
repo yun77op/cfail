@@ -20,7 +20,6 @@ module.exports = {
       type: 'STRING',
       required: true
     },
-    stack: 'STRING',
     username: {
       type: 'STRING',
       required: true,

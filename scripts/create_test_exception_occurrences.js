@@ -5,13 +5,12 @@ const
   serverUrl = 'http://localhost:1337';
 
 var generateRandomExceptionOccurrences = function(number) {
-  var result = [];
   var o = {
     name: ['ReferenceError: sdf is not defined', 'Error: unknown', 'Error: bad', 'RunError: unknown', 'Error: bad'],
     stack: ['nodataComponent is not defined\n\
             at eval (eval at <anonymous> (/usr/local/lib/node_modules/sails/node_modules/ejs/lib/ejs.js:236:14), <anonymous>:29:532)\n\
             at eval (eval at <anonymous> (/usr/local/lib/node_modules/sails/node_modules/ejs/lib/ejs.js:236:14), <anonymous>:29:622)'],
-    type: ['javascript', 'nodejs', 'java', 'python', 'lisp'],
+    ApplicationType: ['javascript', 'nodejs', 'java', 'python', 'lisp'],
     username: ['anonymous', 'yun77op', 'testlink', 'zhte', 'xman'],
     appId: ['53684d9067b4160000d778d4'],
     path: ['/', '/forbidden', '/user/name', 'wrong/place', 'kidding'],
@@ -23,20 +22,35 @@ var generateRandomExceptionOccurrences = function(number) {
             'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)',
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080608 Firefox/2.0.0.14 Flock/1.2.2']
   };
-  var keys = Object.keys(o);
-  var exceptionOccurrence;
+
+  var exceptionOccurrence = {};
+  exceptionOccurrence.ApplicationType = randomItem(o.ApplicationType);
+  exceptionOccurrence.ID = '537213cd8a46328b0b9591af';
+  exceptionOccurrence.ModuleVersion = "1.0.0.0";
+  exceptionOccurrence.FailOccurrences = [];
 
   while (number--) {
-    exceptionOccurrence = {};
-    keys.forEach(function(key) {
-      var alternatives = o[key];
-      var i = Math.min(Math.ceil(Math.random() * alternatives.length), alternatives.length - 1);
-      exceptionOccurrence[key] = alternatives[i];
+    exceptionOccurrence.FailOccurrences.push({
+      OccurrenceTimeUtc: Date.now(),
+      RequestUrl: randomItem(o.path),
+      UserAgent: randomItem(o.agent),
+      User: randomItem(o.username),
+      Exceptions: [
+        {
+          ExceptionMessage: randomItem(o.name),
+          ExceptionType: "Javascript Error",
+          StackTrace: randomItem(o.stack)
+        }
+      ]
     });
-    result.push(exceptionOccurrence);
   }
 
-  return result;
+  return exceptionOccurrence;
+};
+
+var randomItem = function(alternatives) {
+  var i = Math.min(Math.ceil(Math.random() * alternatives.length), alternatives.length - 1);
+  return alternatives[i];
 };
 
 var want = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 1;
@@ -45,7 +59,7 @@ console.log('creating ' + want + ' test exceptionOccurrence' + (want > 1 ? 's' :
 
 var exceptionOccurrences = generateRandomExceptionOccurrences(want);
 
-var createExceptionOccurrence = function(exceptionOccurrence, cb) {
+var createExceptionOccurrence = function(exceptionOccurrence) {
   var def = deferred();
   var ctx = {};
 
@@ -68,11 +82,14 @@ var createExceptionOccurrence = function(exceptionOccurrence, cb) {
   return def.promise;
 };
 
-var createExceptionOccurrenceThrottled = deferred.gate(createExceptionOccurrence, 2);
-deferred.map(exceptionOccurrences, createExceptionOccurrenceThrottled)(function(result) {
-  process.exit(0);
-}).
-done(null, doError);
+//var createExceptionOccurrenceThrottled = deferred.gate(createExceptionOccurrence, 2);
+//deferred.map(exceptionOccurrences, createExceptionOccurrenceThrottled)(function(result) {
+//  process.exit(0);
+//}).
+//done(null, doError);
+
+createExceptionOccurrence(exceptionOccurrences).
+  done(null, doError);
 
 function doError(e) {
   process.stderr.write("error: " + e.toString() + "\n");

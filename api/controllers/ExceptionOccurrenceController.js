@@ -19,11 +19,9 @@ var _ = require('lodash');
 var deferred = require('deferred');
 var uaParser = require('ua-parser');
 var moment = require('moment');
-var mongodb = require('../../lib/db/mongodb');
 
 module.exports = {
     
-  
 
 
   /**
@@ -32,46 +30,105 @@ module.exports = {
    */
   _config: {},
 
-  'create': function(req, res) {
-    var body = req.body;
+  'jsFail': function(req, res) {
+    var data;
 
+    var respond = function() {
+      var img = new Buffer('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', 'base64');
+      res.contentType = 'image/gif';
+      res.send(img);
+    };
+
+    try {
+      data = JSON.parse(req.query.json);
+    } catch(e) {
+      respond();
+      return;
+    }
+
+    module.exports._create(data, respond);
+  },
+
+  _create: function(json, cb) {
+    var exceptions = [];
+    var exceptionOccurrences = [];
+
+    json.FailOccurrences.forEach(function(failOccurrence) {
+      failOccurrence.Exceptions.forEach(function(aException) {
+        var exception = {
+          type: json.ApplicationType,
+          stack: aException.StackTrace || '',
+          name: aException.ExceptionMessage,
+          appId: json.ID,
+          username: failOccurrence.User
+        };
+
+        exceptions.push(exception);
+
+        var exceptionOccurrence = {
+          type: json.ApplicationType,
+          name: aException.ExceptionMessage,
+          appId: json.ID,
+          username: failOccurrence.User,
+          exceptionId: null,
+          path: failOccurrence.XHRRequestURL || failOccurrence.RequestUrl
+        };
+
+        var client = uaParser.parse(failOccurrence.UserAgent);
+        exceptionOccurrence.client_ua = client.ua.toString();
+        exceptionOccurrence.client_os = client.os.toString();
+
+        exceptionOccurrences.push(exceptionOccurrence);
+      });
+    });
+
+    var insertException = function(exception, i) {
+      return Exception.findOneByName(exception.name).
+        then(function(aException) {
+          if (!aException) {
+            return Exception.create(exception);
+          }
+          return aException;
+        }).
+        catch(function(err) {
+          // Ignore E11000 duplicate key error
+          if (err.code == '11000') {
+            return Exception.findOneByName(exception.name);
+          }
+        }).
+        then(function(exception) {
+          var exceptionOccurrence = exceptionOccurrences[i];
+          exceptionOccurrence.exceptionId = exception.id;
+          return ExceptionOccurrence.create(exceptionOccurrence);
+        });
+    };
+
+    deferred.map(exceptions, insertException)(function() {
+      cb();
+    }).
+    catch(function(err) {
+      sails.log.error(err);
+      cb(err);
+    });
+  },
+
+  'create': function(req, res) {
     // TODO: First , let's verify the payload's integrity?
 
-    var exception = _.pick(body, 'type', 'name', 'username', 'appId');
+    var body = req.body;
 
-    Exception.findByName(exception.name).
-      limit(1).
-      then(function(exceptions) {
-        if (exceptions.length == 0) {
-          return Exception.create(exception);
-        }
-        return exceptions[0];
-      }).
-      then(function(exception) {
-        var exceptionOccurrence = _.pick(body, 'name', 'username', 'type', 'appId', 'path');
-        exceptionOccurrence.exceptionId = exception.id;
-        exceptionOccurrence.stack = body.stack || '';
-        var agent = body.agent || req.headers['user-agent'];
-
-        if (agent) {
-          var client = uaParser.parse(agent);
-          exceptionOccurrence.client_ua = client.ua.toString();
-          exceptionOccurrence.client_os = client.os.toString();
-        }
-
-        return ExceptionOccurrence.create(exceptionOccurrence);
-      }).
-      done(function() {
-        res.send({
-          success: true
-        });
-      }, function(err) {
-        sails.log.error('Error raised when creating exceptionOccurrence: ' + err.toString());
+    module.exports._create(body, function(err) {
+      if (err) {
         res.send({
           success: false,
           error: err.toString()
         });
-      });
+      } else {
+        res.send({
+          success: true
+        });
+      }
+    });
   },
 
   'filterByFailure': function(req, res) {
@@ -91,88 +148,85 @@ module.exports = {
 //    sails-mongo do not support `aggregate`
 //    and we have no access to sails-mongo adpater's connection,
 //    so we have to open connection to mongodb directly
-    mongodb.acquireConnection(sails.config.adapters.mongo, function(err, connection) {
+
+    sails.adapters['sails-mongo'].native('exceptionoccurrence', function(err, collection) {
       if (err) return res.serverError(err);
 
-      connection.collection('exceptionoccurrence', function(err, collection) {
-        if (err) return res.serverError(err);
+      var aggregate = function(options, cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
 
-        var aggregate = function(options, cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
-
-              {
-                $group: {
-                  _id: { name: '$name', type: '$type', exceptionId: '$exceptionId' },
-                  occurrence: { $sum: 1 },
-                  createdAt: { $max: '$createdAt' }
-                }
-              },
-
-              { $sort: { occurrence: -1 } },
-
-              { $skip : options.skip },
-
-              { $limit : options.limit },
-
-              {
-                $project: {
-                  _id: 0,
-                  name: '$_id.name',
-                  type: '$_id.type',
-                  id: '$_id.exceptionId',
-                  latestOccurrenceAt: '$createdAt',
-                  occurrence: 1
-                }
+            {
+              $group: {
+                _id: { name: '$name', type: '$type', exceptionId: '$exceptionId' },
+                occurrence: { $sum: 1 },
+                createdAt: { $max: '$createdAt' }
               }
-            ],
+            },
 
-            {},
+            { $sort: { occurrence: -1 } },
 
-            cb);
-        };
+            { $skip : options.skip },
 
-        var countTotal = function(cb) {
+            { $limit : options.limit },
+
+            {
+              $project: {
+                _id: 0,
+                name: '$_id.name',
+                type: '$_id.type',
+                id: '$_id.exceptionId',
+                latestOccurrenceAt: '$createdAt',
+                occurrence: 1
+              }
+            }
+          ],
+
+          {},
+
+          cb);
+      };
+
+      var countTotal = function(cb) {
 //          the simple approach is using `count distinct`,
 //          but mongo throw exception `distinct too big` if dataset is bigger than 16MB,
 //          so we prefer aggregation
-          collection.aggregate(
-            [
-              { $match: $match },
+        collection.aggregate(
+          [
+            { $match: $match },
 
-              {
-                $group: {
-                  _id: { name: '$name', type: '$type', exceptionId: '$exceptionId' }
-                }
-              },
-
-              {
-                $group: {
-                  _id: 0,
-                  total: { $sum: 1 }
-                }
+            {
+              $group: {
+                _id: { name: '$name', type: '$type', exceptionId: '$exceptionId' }
               }
-            ], {}, cb);
-        };
+            },
 
-        var defAggregate = deferred.promisify(aggregate);
-        var defCountTotal = deferred.promisify(countTotal);
+            {
+              $group: {
+                _id: 0,
+                total: { $sum: 1 }
+              }
+            }
+          ], {}, cb);
+      };
 
-        deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
-          then(function(resp) {
-            var total = resp[1];
-            total = total.length > 0 ? total[0].total : 0;
+      var defAggregate = deferred.promisify(aggregate);
+      var defCountTotal = deferred.promisify(countTotal);
 
-            res.send({
-              list: resp[0],
-              total: total
-            });
-          }, function(err) {
-            res.serverError(err);
+      deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
+        then(function(resp) {
+          var total = resp[1];
+          total = total.length > 0 ? total[0].total : 0;
+
+          res.send({
+            list: resp[0],
+            total: total
           });
+        }, function(err) {
+          res.serverError(err);
+        });
 
-      });
     });
   },
 
@@ -189,83 +243,79 @@ module.exports = {
       $match.type = req.query.type;
     }
 
-    mongodb.acquireConnection(sails.config.adapters.mongo, function(err, connection) {
+    sails.adapters['sails-mongo'].native('exceptionoccurrence', function(err, collection) {
       if (err) return res.serverError(err);
 
-      connection.collection('exceptionoccurrence', function(err, collection) {
-        if (err) return res.serverError(err);
+      var aggregate = function(options, cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
 
-        var aggregate = function(options, cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
-
-              {
-                $group: {
-                  _id: '$username',
-                  occurrence: { $sum: 1 },
-                  createdAt: { $max: '$createdAt' }
-                }
-              },
-
-              { $sort: { occurrence: -1 } },
-
-              { $skip : options.skip },
-
-              { $limit : options.limit },
-
-              {
-                $project: {
-                  _id: 0,
-                  username: '$_id',
-                  latestOccurrenceAt: '$createdAt',
-                  occurrence: 1
-                }
+            {
+              $group: {
+                _id: '$username',
+                occurrence: { $sum: 1 },
+                createdAt: { $max: '$createdAt' }
               }
-            ],
+            },
 
-            {},
+            { $sort: { occurrence: -1 } },
 
-            cb);
-        };
+            { $skip : options.skip },
 
-        var countTotal = function(cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
+            { $limit : options.limit },
 
-              {
-                $group: {
-                  _id: '$username'
-                }
-              },
-
-              {
-                $group: {
-                  _id: 0,
-                  total: { $sum: 1 }
-                }
+            {
+              $project: {
+                _id: 0,
+                username: '$_id',
+                latestOccurrenceAt: '$createdAt',
+                occurrence: 1
               }
-            ], {}, cb);
-        };
+            }
+          ],
 
-        var defAggregate = deferred.promisify(aggregate);
-        var defCountTotal = deferred.promisify(countTotal);
+          {},
 
-        deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
-          then(function(resp) {
-            var total = resp[1];
-            total = total.length > 0 ? total[0].total : 0;
+          cb);
+      };
 
-            res.send({
-              list: resp[0],
-              total: total
-            });
-          }, function(err) {
-            res.serverError(err);
+      var countTotal = function(cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
+
+            {
+              $group: {
+                _id: '$username'
+              }
+            },
+
+            {
+              $group: {
+                _id: 0,
+                total: { $sum: 1 }
+              }
+            }
+          ], {}, cb);
+      };
+
+      var defAggregate = deferred.promisify(aggregate);
+      var defCountTotal = deferred.promisify(countTotal);
+
+      deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
+        then(function(resp) {
+          var total = resp[1];
+          total = total.length > 0 ? total[0].total : 0;
+
+          res.send({
+            list: resp[0],
+            total: total
           });
+        }, function(err) {
+          res.serverError(err);
+        });
 
-      });
     });
   },
 
@@ -282,83 +332,79 @@ module.exports = {
       $match.type = req.query.type;
     }
 
-    mongodb.acquireConnection(sails.config.adapters.mongo, function(err, connection) {
+    sails.adapters['sails-mongo'].native('exceptionoccurrence', function(err, collection) {
       if (err) return res.serverError(err);
 
-      connection.collection('exceptionoccurrence', function(err, collection) {
-        if (err) return res.serverError(err);
+      var aggregate = function(options, cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
 
-        var aggregate = function(options, cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
-
-              {
-                $group: {
-                  _id: '$path',
-                  occurrence: { $sum: 1 },
-                  createdAt: { $max: '$createdAt' }
-                }
-              },
-
-              { $sort: { occurrence: -1 } },
-
-              { $skip : options.skip },
-
-              { $limit : options.limit },
-
-              {
-                $project: {
-                  _id: 0,
-                  path: '$_id',
-                  latestOccurrenceAt: '$createdAt',
-                  occurrence: 1
-                }
+            {
+              $group: {
+                _id: '$path',
+                occurrence: { $sum: 1 },
+                createdAt: { $max: '$createdAt' }
               }
-            ],
+            },
 
-            {},
+            { $sort: { occurrence: -1 } },
 
-            cb);
-        };
+            { $skip : options.skip },
 
-        var countTotal = function(cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
+            { $limit : options.limit },
 
-              {
-                $group: {
-                  _id: '$path'
-                }
-              },
-
-              {
-                $group: {
-                  _id: 0,
-                  total: { $sum: 1 }
-                }
+            {
+              $project: {
+                _id: 0,
+                path: '$_id',
+                latestOccurrenceAt: '$createdAt',
+                occurrence: 1
               }
-            ], {}, cb);
-        };
+            }
+          ],
 
-        var defAggregate = deferred.promisify(aggregate);
-        var defCountTotal = deferred.promisify(countTotal);
+          {},
 
-        deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
-          then(function(resp) {
-            var total = resp[1];
-            total = total.length > 0 ? total[0].total : 0;
+          cb);
+      };
 
-            res.send({
-              list: resp[0],
-              total: total
-            });
-          }, function(err) {
-            res.serverError(err);
+      var countTotal = function(cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
+
+            {
+              $group: {
+                _id: '$path'
+              }
+            },
+
+            {
+              $group: {
+                _id: 0,
+                total: { $sum: 1 }
+              }
+            }
+          ], {}, cb);
+      };
+
+      var defAggregate = deferred.promisify(aggregate);
+      var defCountTotal = deferred.promisify(countTotal);
+
+      deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
+        then(function(resp) {
+          var total = resp[1];
+          total = total.length > 0 ? total[0].total : 0;
+
+          res.send({
+            list: resp[0],
+            total: total
           });
+        }, function(err) {
+          res.serverError(err);
+        });
 
-      });
     });
   },
 
@@ -375,84 +421,80 @@ module.exports = {
       $match.type = req.query.type;
     }
 
-    mongodb.acquireConnection(sails.config.adapters.mongo, function(err, connection) {
+    sails.adapters['sails-mongo'].native('exceptionoccurrence', function(err, collection) {
       if (err) return res.serverError(err);
 
-      connection.collection('exceptionoccurrence', function(err, collection) {
-        if (err) return res.serverError(err);
+      var aggregate = function(options, cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
 
-        var aggregate = function(options, cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
-
-              {
-                $group: {
-                  _id: { client_ua: '$client_ua', client_os: '$client_os' },
-                  occurrence: { $sum: 1 },
-                  createdAt: { $max: '$createdAt' }
-                }
-              },
-
-              { $sort: { occurrence: -1 } },
-
-              { $skip : options.skip },
-
-              { $limit : options.limit },
-
-              {
-                $project: {
-                  _id: 0,
-                  client_ua: '$_id.client_ua',
-                  client_os: '$_id.client_os',
-                  latestOccurrenceAt: '$createdAt',
-                  occurrence: 1
-                }
+            {
+              $group: {
+                _id: { client_ua: '$client_ua', client_os: '$client_os' },
+                occurrence: { $sum: 1 },
+                createdAt: { $max: '$createdAt' }
               }
-            ],
+            },
 
-            {},
+            { $sort: { occurrence: -1 } },
 
-            cb);
-        };
+            { $skip : options.skip },
 
-        var countTotal = function(cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
+            { $limit : options.limit },
 
-              {
-                $group: {
-                  _id: { client_ua: '$client_ua', client_os: '$client_os' }
-                }
-              },
-
-              {
-                $group: {
-                  _id: 0,
-                  total: { $sum: 1 }
-                }
+            {
+              $project: {
+                _id: 0,
+                client_ua: '$_id.client_ua',
+                client_os: '$_id.client_os',
+                latestOccurrenceAt: '$createdAt',
+                occurrence: 1
               }
-            ], {}, cb);
-        };
+            }
+          ],
 
-        var defAggregate = deferred.promisify(aggregate);
-        var defCountTotal = deferred.promisify(countTotal);
+          {},
 
-        deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
-          then(function(resp) {
-            var total = resp[1];
-            total = total.length > 0 ? total[0].total : 0;
+          cb);
+      };
 
-            res.send({
-              list: resp[0],
-              total: total
-            });
-          }, function(err) {
-            res.serverError(err);
+      var countTotal = function(cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
+
+            {
+              $group: {
+                _id: { client_ua: '$client_ua', client_os: '$client_os' }
+              }
+            },
+
+            {
+              $group: {
+                _id: 0,
+                total: { $sum: 1 }
+              }
+            }
+          ], {}, cb);
+      };
+
+      var defAggregate = deferred.promisify(aggregate);
+      var defCountTotal = deferred.promisify(countTotal);
+
+      deferred(defAggregate({ skip: skip, limit: limit }), defCountTotal()).
+        then(function(resp) {
+          var total = resp[1];
+          total = total.length > 0 ? total[0].total : 0;
+
+          res.send({
+            list: resp[0],
+            total: total
           });
+        }, function(err) {
+          res.serverError(err);
+        });
 
-      });
     });
   },
 
@@ -470,91 +512,87 @@ module.exports = {
       }
     };
 
-    mongodb.acquireConnection(sails.config.adapters.mongo, function(err, connection) {
+    sails.adapters['sails-mongo'].native('exceptionoccurrence', function(err, collection) {
       if (err) return res.serverError(err);
 
-      connection.collection('exceptionoccurrence', function(err, collection) {
-        if (err) return res.serverError(err);
+      var aggregate = function(cb) {
+        collection.aggregate(
+          [
+            { $match: $match },
 
-        var aggregate = function(cb) {
-          collection.aggregate(
-            [
-              { $match: $match },
-
-              {
-                $group: {
-                  _id: {
-                    year : { $year : "$createdAt" },
-                    month : { $month : "$createdAt" },
-                    day : { $dayOfMonth : "$createdAt" },
-                    type: '$type'
-                  },
-                  occurrence: { $sum: 1 }
-                }
-              },
-
-              { $sort: { '_id.type': -1, '_id.year': 1, '_id.month': 1, '_id.day': 1 } },
-
-              {
-                $group: {
-                  _id: {
-                    type: '$_id.type'
-                  },
-                  occurrenceSeries: { $push: '$occurrence' },
-                  yearSeries: { $push: '$_id.year' },
-                  monthSeries: { $push: '$_id.month' },
-                  daySeries: { $push: '$_id.day' }
-                }
-              },
-
-
-              {
-                $project: {
-                  _id: 0,
-                  type: '$_id.type',
-                  occurrenceSeries: 1,
-                  yearSeries: 1,
-                  monthSeries: 1,
-                  daySeries: 1
-                }
+            {
+              $group: {
+                _id: {
+                  year : { $year : "$createdAt" },
+                  month : { $month : "$createdAt" },
+                  day : { $dayOfMonth : "$createdAt" },
+                  type: '$type'
+                },
+                occurrence: { $sum: 1 }
               }
-            ],
+            },
 
-            {},
+            { $sort: { '_id.type': -1, '_id.year': 1, '_id.month': 1, '_id.day': 1 } },
 
-            cb);
-        };
+            {
+              $group: {
+                _id: {
+                  type: '$_id.type'
+                },
+                occurrenceSeries: { $push: '$occurrence' },
+                yearSeries: { $push: '$_id.year' },
+                monthSeries: { $push: '$_id.month' },
+                daySeries: { $push: '$_id.day' }
+              }
+            },
 
 
-        var defAggregate = deferred.promisify(aggregate);
-
-        defAggregate().
-          then(function(resp) {
-            if (resp.length > 0) {
-              var index = 0;
-              var i = 0;
-
-              for (var date = moment(dateRange.begin).startOf('day'); ;i++) {
-                if (!date.isSame(moment([resp[0].yearSeries[index], resp[0].monthSeries[index] - 1, resp[0].daySeries[index]]), 'day')) {
-                  resp.forEach(function(item) {
-                    item.occurrenceSeries.splice(i, 0, 0);
-                    item.yearSeries.splice(i, 0, date.year());
-                    item.monthSeries.splice(i, 0, date.month() + 1);
-                    item.daySeries.splice(i, 0, date.date());
-                  });
-                }
-                index++;
-                if (date.isSame(moment(dateRange.end).startOf('day'), 'day')) break;
-                date.add('d', 1);
+            {
+              $project: {
+                _id: 0,
+                type: '$_id.type',
+                occurrenceSeries: 1,
+                yearSeries: 1,
+                monthSeries: 1,
+                daySeries: 1
               }
             }
+          ],
 
-            res.send(resp);
-          }, function(err) {
-            res.serverError(err);
-          });
+          {},
 
-      });
+          cb);
+      };
+
+
+      var defAggregate = deferred.promisify(aggregate);
+
+      defAggregate().
+        then(function(resp) {
+          if (resp.length > 0) {
+            var index = 0;
+            var i = 0;
+
+            for (var date = moment(dateRange.begin).startOf('day'); ;i++) {
+              if (!date.isSame(moment([resp[0].yearSeries[index], resp[0].monthSeries[index] - 1, resp[0].daySeries[index]]), 'day')) {
+                resp.forEach(function(item) {
+                  item.occurrenceSeries.splice(i, 0, 0);
+                  item.yearSeries.splice(i, 0, date.year());
+                  item.monthSeries.splice(i, 0, date.month() + 1);
+                  item.daySeries.splice(i, 0, date.date());
+                });
+              }
+              index++;
+              if (date.isSame(moment(dateRange.end).startOf('day'), 'day')) break;
+              date.add('d', 1);
+            }
+          }
+
+          res.send(resp);
+        }, function(err) {
+          res.serverError(err);
+        });
+
     });
   }
 

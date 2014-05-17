@@ -10,8 +10,9 @@ module.exports = {
 
   attributes: {
     name: {
-      type: 'STRING',
+      type: 'string',
       required: true,
+      unique: true,
       index: true
     },
 
@@ -24,6 +25,8 @@ module.exports = {
       type: 'STRING',
       required: true
     },
+
+    stack: 'STRING',
 
     status: {
       type: 'STRING',

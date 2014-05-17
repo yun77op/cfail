@@ -49,8 +49,9 @@ module.exports.routes = {
 
   'get /app/*': 'MainController.index',
 
-  'get /settings': 'MainController.index'
+  'get /settings': 'MainController.index',
 
+  'get /jsFail/v1': 'ExceptionOccurrenceController.jsFail'
 
 
   /*
