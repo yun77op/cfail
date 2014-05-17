@@ -1,13 +1,24 @@
-Hi! <%= name %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Cfail</title>
+</head>
+<body>
+<h1>Hi! <%= name %></h1>
 
-<%= format('%s invites you to Cfail as a collaborator on the project %s', inviter, appName) %>
+<p><%= format('%s invites you to Cfail as a collaborator on the project %s', inviter, appName) %></p>
 
 <% if (explicitPassword) { %>
-<%= format('Your password is %s', explicitPassword)%>
+<p><%= format('Your password is %s', explicitPassword)%></p>
 
-<%= format('Click to confirm this email address and sign in to %s', 'cfail')%>
-<%= link %>
+<p>
+    <a href="<%= link %>"><%= format('Click to confirm this email address and sign in to %s', 'cfail')%></a>
+</p>
 <% } %>
 
-Thank you,
-Cfail
+<p>
+    Thank you<br>
+    Cfail
+</p>
+</body>

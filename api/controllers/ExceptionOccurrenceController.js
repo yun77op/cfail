@@ -19,6 +19,7 @@ var _ = require('lodash');
 var deferred = require('deferred');
 var uaParser = require('ua-parser');
 var moment = require('moment');
+var email = require('../../lib/mail');
 
 module.exports = {
     
@@ -102,6 +103,16 @@ module.exports = {
           return ExceptionOccurrence.create(exceptionOccurrence);
         });
     };
+
+    if (json.ID !== 'demo') {
+      Application.findOne(json.ID).
+        done(function(app) {
+          email.sendNotificationEmail(app.reportFailureEmail, null, {
+            appId: json.ID
+          });
+        });
+    }
+
 
     deferred.map(exceptions, insertException)(function() {
       cb();

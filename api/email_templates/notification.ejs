@@ -5,12 +5,10 @@
     <title>Cfail</title>
 </head>
 <body>
-<h1>Thank you for using Cfail</h1>
+<h1>Notification from cfail</h1>
 
-<p>
-    <a href="<%= link %>"><%= format('Click to confirm this email address and sign in to %s', 'cfail')%></a>
-</p>
-
+<p><%= format('Exceptions captured on %s', 'cfail')%></p>
+<p><a href="<%= format('%s/app/%s/filter-failures', localAppURL, appId)%>">Click here to view</a></p>
 <p>
     Thank you<br>
     Cfail
