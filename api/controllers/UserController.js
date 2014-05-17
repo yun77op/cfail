@@ -171,6 +171,10 @@ module.exports = {
 
     User.findOne(body.userId).
       then(function(user) {
+        if (!user) {
+          return httputils.error(res, 'User not found');
+        }
+
         user.authenticate(body.password, function(err, authenticated) {
           if (err) return res.serverError(err);
           if (!authenticated) {

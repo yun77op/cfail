@@ -37,6 +37,11 @@ module.exports.routes = {
     action: 'index'
   },
 
+  'get /demo': {
+    controller: 'MainController',
+    action: 'demo'
+  },
+
   'get /login': {
     view: 'user/login'
   },

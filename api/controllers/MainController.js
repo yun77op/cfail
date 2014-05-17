@@ -32,7 +32,6 @@ module.exports = {
       return;
     }
 
-
     var render = function(stagedList) {
       var viewPath;
       var ctx = {};
@@ -47,13 +46,30 @@ module.exports = {
       res.view(viewPath, ctx);
     };
 
+    if (req.session.user.id === 'demo') {
+      render([{
+        id: 'demo',
+        userId: 'demo',
+        userName: 'demo@example.com',
+        role: 'admin',
+        appId: 'demo',
+        appName: 'demo'
+      }]);
+      return;
+    }
+
     Staged.findByUserId(req.session.user.id).
       done(function(err, stagedList) {
         if (err) return res.send(err, 500);
 
         render(stagedList);
       });
-  }
+  },
 
+  demo: function(req, res) {
+    req.session.user = { id: 'demo', name: 'demo@example.com' };
+    req.session.authenticated = true;
+    res.redirect('/');
+  }
   
 };

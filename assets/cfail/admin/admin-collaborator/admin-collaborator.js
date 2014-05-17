@@ -15,6 +15,11 @@ define(['angular', 'text!./admin-collaborator.html', 'ap.config'], function(angu
             e.preventDefault();
 
             var appId = $routeParams.appId;
+
+            if (appId === 'demo') {
+              return alert('demo 应用不支持添加协作者');
+            }
+
             var staged = _.find(config.stagedList, function(staged) {
               return staged.appId === appId;
             });

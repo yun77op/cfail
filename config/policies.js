@@ -18,6 +18,10 @@ module.exports.policies = {
   // (`true` allows public access) 
   '*': 'isAuthenticated',
 
+  MainController: {
+    'demo': true
+  },
+
   UserController: {
     '*': true,
     'changePassword': ['isAuthenticated', 'ensureUserId']

@@ -14,7 +14,7 @@
                     <li ng-repeat="staged in stagedList">
                         <a href="/app/{{staged.appId}}/filter-failures">{{staged.appName}}</a>
                     </li>
-                    <li><a href="" ng-click="createApplication()">创建新应用</a></li>
+                    <li ng-hide="stagedList[0].appId === 'demo'"><a href="" ng-click="createApplication()">创建新应用</a></li>
                 </ul>
             </div>
 

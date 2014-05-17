@@ -59,7 +59,7 @@ define(['angular',
           controller: 'SettingsController'
         }).
         otherwise({
-          redirectTo: '/'
+          redirectTo: '/app/' + config.stagedList[0].id + '/filter-failures'
         });
 
       $locationProvider.html5Mode(true);
