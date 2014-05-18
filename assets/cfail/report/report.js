@@ -1,4 +1,4 @@
-define(['angular', '_', 'angular.bootstrap', 'application/application_service'], function(angular, _) {
+define(['angular', '_', 'angular.bootstrap', 'cfail/application/application_service'], function(angular, _) {
 
 
   angular.module('cfail.report', ['cfail', 'ui.bootstrap', 'cfail.service']).

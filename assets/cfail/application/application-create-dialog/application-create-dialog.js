@@ -1,6 +1,6 @@
 define(['angular',
         'text!./application-create-dialog.html',
-        'application/application_service'], function(angular, applicationCreateDialogHtml) {
+        '../application_service'], function(angular, applicationCreateDialogHtml) {
 
   angular.module('application.create', ['application.service']).
     run(['$templateCache', function($templateCache) {

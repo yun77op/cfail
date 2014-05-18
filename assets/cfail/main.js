@@ -1,16 +1,16 @@
 require.config({
-  baseUrl: '/cfail',
+  baseUrl: '/',
 
   paths: {
     'angular': 'http://cdn.staticfile.org/angular.js/1.2.6/angular.min',
     'angular.route': '/components/angular-route/angular-route',
     'angular.bootstrap': '/components/angular-bootstrap/ui-bootstrap-tpls',
-    'text': '/components/requirejs-text/text',
-    'jquery': '/components/jquery/jquery',
-    'highcharts': '/components/highcharts/highcharts.src',
+    'text': 'components/requirejs-text/text',
+    'jquery': 'http://cdn.staticfile.org/jquery/1.9.1/jquery.min',
+    'highcharts': 'http://cdn.staticfile.org/highcharts/3.0.7/highcharts',
     'angular.hightcharts': '/components/highcharts-ng/dist/highcharts-ng',
-    '_': '/components/lodash/dist/lodash',
-    'angular.resources': '/components/angular-resource/angular-resource'
+    '_': 'http://cdn.staticfile.org/lodash.js/2.4.1/lodash.min',
+    'angular.resources': 'http://cdn.staticfile.org/angular-resource/1.2.16/angular-resource.min'
   },
 
   shim: {
@@ -25,7 +25,6 @@ require.config({
 });
 
 require(['angular', 'ap.config', '/cfail/cfail_service.js'], function(angular, cfg) {
-
   angular.module('cfail', ['cfail.service']).
     config(['$httpProvider', function($httpProvider) {
       $httpProvider.defaults.transformRequest.unshift(function(data, headers) {

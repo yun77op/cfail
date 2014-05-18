@@ -125,6 +125,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks("grunt-vows");
 
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
+
   // Get path to core grunt dependencies from Sails
   var depsPath = grunt.option('gdsrc') || 'node_modules/sails/node_modules';
   grunt.loadTasks(depsPath + '/grunt-contrib-clean/tasks');
@@ -425,6 +427,43 @@ module.exports = function (grunt) {
        ************************************/
     },
 
+    requirejs: {
+      compile: {
+        options: {
+          baseUrl: "./assets",
+          mainConfigFile: "./assets/cfail/main.js",
+          optimize: "uglify",
+
+          dir: './www',
+          paths: {
+            "angular": "empty:",
+            "jquery": "empty:",
+            "highcharts": "empty:",
+            "_": "empty:",
+            "angular.route": "empty:",
+            "angular.bootstrap": "empty:",
+            "angular.hightcharts": "empty:",
+            "angular.resources": "empty:",
+            "ap.config": "empty:"
+          },
+          keepBuildDir: false,
+          modules: [
+            {
+              name: 'cfail/components/user/user-register'
+            },
+            {
+              name: 'cfail/components/login/login'
+            },
+            {
+              name: 'cfail/cfail'
+            }
+          ],
+          skipDirOptimize: true,
+          inlineText: true
+        }
+      }
+    },
+
     watch: {
       api: {
 
@@ -481,20 +520,21 @@ module.exports = function (grunt) {
 
   // When sails is lifted in production
   grunt.registerTask('prod', [
-    'clean:dev',
-    'jst:dev',
-    'less:dev',
-    'copy:dev',
-    'coffee:dev',
-    'concat',
-    'uglify',
-    'cssmin',
-    'sails-linker:prodJs',
-    'sails-linker:prodStyles',
-    'sails-linker:devTpl',
-    'sails-linker:prodJsJADE',
-    'sails-linker:prodStylesJADE',
-    'sails-linker:devTplJADE'
+    'clean:build',
+//    'jst:dev',
+//    'less:dev',
+//    'copy:dev',
+//    'coffee:dev',
+//    'concat',
+//    'uglify',
+//    'cssmin',
+//    'sails-linker:prodJs',
+//    'sails-linker:prodStyles',
+//    'sails-linker:devTpl',
+//    'sails-linker:prodJsJADE',
+//    'sails-linker:prodStylesJADE',
+//    'sails-linker:devTplJADE',
+    'requirejs:compile'
   ]);
 
   // When API files are changed:
