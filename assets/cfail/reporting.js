@@ -25,7 +25,7 @@ cfail.reporting = (function () {
   var RequestUrl = null;
   var logEnabled = false;
   var D = "cfail/reporting.js";
-  var JOSN2_URL = "https://s3.amazonaws.com/cfail-us/json2.min.js";
+  var JOSN2_URL = "http://cdn.staticfile.org/json2/20130526/json2.min.js";
   var hasOnlineBool = J ? false : (typeof navigator.onLine === "boolean") ? true : false;
   var clone = function (L) {
     var M = !L ? null : (L instanceof Array ? [] : {});
