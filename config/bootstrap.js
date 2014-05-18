@@ -55,7 +55,8 @@ module.exports.bootstrap = function (cb) {
   email.setConfig({
     log: sails.log,
     email_to_console: sails.config.email_to_console,
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    mail: sails.config.mail
   });
 
   cb();

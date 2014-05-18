@@ -52,11 +52,5 @@ module.exports = {
   // By default, Sails sets its environment using the `NODE_ENV` environment variable.
   // If NODE_ENV is not set, Sails will run in the 'development' environment.
 
-  environment: process.env.NODE_ENV || 'development',
-
-  email_to_console: false,
-
-  paths: {
-    public: process.cwd() + (process.env.PUBLIC_DIR || '/.tmp/public')
-  }
+  environment: process.env.NODE_ENV || 'development'
 };
