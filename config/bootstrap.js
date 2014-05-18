@@ -19,23 +19,24 @@ module.exports.bootstrap = function (cb) {
 
   var app = sails.express.app;
 
+  var baseUrl = process.env.BASE_URL;
 
-  // sails has `getBaseurl` method at version 0.10
-  var usingSSL = (
-    (
-      sails.config.serverOptions &&
-        sails.config.serverOptions.key &&
-        sails.config.serverOptions.cert
-      ) || (
-      sails.config.express &&
-        sails.config.express.serverOptions &&
-        sails.config.express.serverOptions.key &&
-        sails.config.express.serverOptions.cert
-      )
-    );
-
-  var host = process.env.HOST || sails.config.host;
-  var baseUrl = ( usingSSL ? 'https' : 'http' ) + '://' + host + ':' + sails.config.port + '';
+  if (!baseUrl) {
+    // sails has `getBaseurl` method at version 0.10
+    var usingSSL = (
+      (
+        sails.config.serverOptions &&
+          sails.config.serverOptions.key &&
+          sails.config.serverOptions.cert
+        ) || (
+        sails.config.express &&
+          sails.config.express.serverOptions &&
+          sails.config.express.serverOptions.key &&
+          sails.config.express.serverOptions.cert
+        )
+      );
+    baseUrl = ( usingSSL ? 'https' : 'http' ) + '://' + sails.config.host + ':' + sails.config.port + '';
+  }
 
   app.locals.generateComponent = function(prefix) {
     var id = (prefix || 'component') + '-' +  crypto.randomBytes(16).toString('base64');
