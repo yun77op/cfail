@@ -34,7 +34,8 @@ module.exports.bootstrap = function (cb) {
       )
     );
 
-  sails.localAppURL = ( usingSSL ? 'https' : 'http' ) + '://' + sails.config.host + ':' + sails.config.port + '';
+  var host = process.env.HOST || sails.config.host;
+  var baseUrl = ( usingSSL ? 'https' : 'http' ) + '://' + host + ':' + sails.config.port + '';
 
   app.locals.generateComponent = function(prefix) {
     var id = (prefix || 'component') + '-' +  crypto.randomBytes(16).toString('base64');
@@ -47,14 +48,13 @@ module.exports.bootstrap = function (cb) {
   };
 
   app.locals.appDebug = sails.config.environment == 'development';
-  app.locals.baseUrl = sails.localAppURL;
-
+  app.locals.baseUrl = baseUrl;
 
   // set email service config
   email.setConfig({
     log: sails.log,
     email_to_console: sails.config.email_to_console,
-    localAppURL: sails.localAppURL
+    baseUrl: baseUrl
   });
 
   cb();

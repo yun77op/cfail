@@ -1,1 +1,1 @@
-web: NODE_ENV=production PUBLIC_DIR=/www node app.js --prod
+web: node app.js --prod
