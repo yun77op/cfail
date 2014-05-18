@@ -55,8 +55,6 @@ module.exports = {
           return;
         }
 
-        sails.log.debug('password: ' + body.passwd);
-
         user.authenticate(body.passwd, function(err, authenticted) {
           if (err) return res.serverError(err);
 
@@ -183,12 +181,14 @@ module.exports = {
             return httputils.error(res, 'Password is not correct');
           }
 
-          user.passwd = body.newPassword;
-
-          user.save(function(err, user) {
+          user.updatePassword(body.newPassword, function(err) {
             if (err) return res.serverError(err);
 
-            httputils.success(res, { user: user });
+            user.save(function(err, user) {
+              if (err) return res.serverError(err);
+
+              httputils.success(res, { user: user });
+            });
           });
         });
       }, function(err) {

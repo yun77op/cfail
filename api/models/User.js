@@ -9,7 +9,7 @@
 var bcrypt = require('bcrypt');
 
 var encryptPassword = function(values, next) {
-  bcrypt.hash(values.passwd, 10, function(err, hash) {
+  bcrypt.hash(values.passwd, 8, function(err, hash) {
     if(err) return next(err);
     values.passwd = hash;
     next();
@@ -47,12 +47,15 @@ module.exports = {
 
     authenticate: function(password, cb) {
       bcrypt.compare(password, this.passwd, cb);
+    },
+
+    updatePassword: function(newPassword, cb) {
+      this.passwd = newPassword;
+      encryptPassword(this, cb);
     }
   },
 
   // Lifecycle Callbacks
-  beforeCreate: encryptPassword,
-
-  beforeUpdate: encryptPassword
+  beforeCreate: encryptPassword
 
 };
