@@ -455,6 +455,9 @@ module.exports = function (grunt) {
               name: 'cfail/components/login/login'
             },
             {
+              name: 'cfail/application/application-nodata/application-nodata'
+            },
+            {
               name: 'cfail/cfail'
             }
           ],
