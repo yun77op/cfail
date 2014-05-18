@@ -55,6 +55,8 @@ module.exports = {
           return;
         }
 
+        sails.log.debug('password: ' + body.passwd);
+
         user.authenticate(body.passwd, function(err, authenticted) {
           if (err) return res.serverError(err);
 
