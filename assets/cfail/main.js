@@ -24,34 +24,35 @@ require(['ap.config'], function(cfg) {
       '_': {'exports': '_'}
     }
   });
-});
 
 
 
-require(['angular', 'ap.config', '/cfail/cfail_service.js'], function(angular, cfg) {
-  angular.module('cfail', ['cfail.service']).
-    config(['$httpProvider', function($httpProvider) {
-      $httpProvider.defaults.transformRequest.unshift(function(data, headers) {
-        if (angular.isObject(data) && Object.prototype.toString.call(data) !== '[object File]') {
-          data._csrf = cfg.csrfToken;
-        }
+  require(['angular', 'cfail/cfail_service'], function(angular) {
+    angular.module('cfail', ['cfail.service']).
+      config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.transformRequest.unshift(function(data, headers) {
+          if (angular.isObject(data) && Object.prototype.toString.call(data) !== '[object File]') {
+            data._csrf = cfg.csrfToken;
+          }
 
-        return data;
+          return data;
+        });
+      }]).
+      controller('MainController', ['$scope', 'cfailService', function($scope, cfailService) {
+        $scope.signout = function() {
+          cfailService.signout();
+        };
+
+      }]);
+
+
+    ah.flushHoldingQueue('addComponentMetadata', function(metadata) {
+      require(metadata.deps || [], function() {
+        angular.module(metadata.moduleName).value('componentMetadata', metadata.cfg);
+        angular.bootstrap(document.getElementById(metadata.elementId), [metadata.moduleName]);
       });
-    }]).
-    controller('MainController', ['$scope', 'cfailService', function($scope, cfailService) {
-      $scope.signout = function() {
-        cfailService.signout();
-      };
-
-    }]);
-
-
-  ah.flushHoldingQueue('addComponentMetadata', function(metadata) {
-    require(metadata.deps || [], function() {
-      angular.module(metadata.moduleName).value('componentMetadata', metadata.cfg);
-      angular.bootstrap(document.getElementById(metadata.elementId), [metadata.moduleName]);
     });
-  });
 
+  });
 });
+
