@@ -431,11 +431,12 @@ module.exports = function (grunt) {
       compile: {
         options: {
           baseUrl: "./assets",
-          mainConfigFile: "./assets/cfail/main.js",
+//          mainConfigFile: "./assets/cfail/main.js",
           optimize: "uglify",
 
           dir: './www',
           paths: {
+            'text': 'components/requirejs-text/text',
             "angular": "empty:",
             "jquery": "empty:",
             "highcharts": "empty:",
@@ -445,6 +446,15 @@ module.exports = function (grunt) {
             "angular.hightcharts": "empty:",
             "angular.resources": "empty:",
             "ap.config": "empty:"
+          },
+          shim: {
+            'angular': {'exports': 'angular'},
+            'angular.route': ['angular'],
+            'angular.resources': ['angular'],
+            'angular.bootstrap': ['angular'],
+            'highcharts': ['jquery'],
+            'angular.hightcharts': ['highcharts'],
+            '_': {'exports': '_'}
           },
           keepBuildDir: false,
           modules: [

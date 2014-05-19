@@ -9,7 +9,7 @@
           define('ap.config', [], {
               csrfToken: '<%- _csrf %>',
               baseUrl: "<%- baseUrl %>",
-              requireBase: '<%= staticBase %>' || '/',
+              requireBase: '<%= staticBase %>' + '/',
               <% if (typeof authenticated != 'undefined') { %>
                 <% if (authenticated) { %>
                     user: <%- JSON.stringify(user) %>,

@@ -27,23 +27,23 @@ define(['angular',
     config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
       $routeProvider.
         when(config.requireBase + 'app/:appId/filter-user', {
-          templateUrl: '/cfail/filter/filter-user/filter-user.html',
+          templateUrl: config.requireBase + 'cfail/filter/filter-user/filter-user.html',
           controller: 'FilterUserController'
         }).
         when(config.requireBase + 'app/:appId/filter-url', {
-          templateUrl: '/cfail/filter/filter-url/filter-url.html',
+          templateUrl: config.requireBase + 'cfail/filter/filter-url/filter-url.html',
           controller: 'FilterUrlController'
         }).
         when(config.requireBase + 'app/:appId/filter-failures', {
-          templateUrl: '/cfail/filter/filter-failures/filter-failures.html',
+          templateUrl: config.requireBase + 'cfail/filter/filter-failures/filter-failures.html',
           controller: 'FilterFailuresController'
         }).
         when(config.requireBase + 'app/:appId/filter-client', {
-          templateUrl: '/cfail/filter/filter-client/filter-client.html',
+          templateUrl: config.requireBase + 'cfail/filter/filter-client/filter-client.html',
           controller: 'FilterClientController'
         }).
         when(config.requireBase + 'app/:appId/admin/:subsection?', {
-          templateUrl: '/cfail/admin/admin.html',
+          templateUrl: config.requireBase + 'cfail/admin/admin.html',
           controller: 'AdminController'
         }).
         when('/app/:appId/report', {
