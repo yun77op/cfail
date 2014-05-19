@@ -51,7 +51,7 @@ module.exports.bootstrap = function (cb) {
   app.locals.appDebug = sails.config.environment == 'development';
   app.locals.baseUrl = baseUrl;
 
-  app.locals.staticBase = sails.config.STATIC_BASE || '';
+  app.locals.staticBase = sails.config.staticBase || '';
 
   // set email service config
   email.setConfig({
