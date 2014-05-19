@@ -5,6 +5,7 @@ module.exports = {
 
   paths: {
     public: process.cwd() + (process.env.PUBLIC_DIR || '/.tmp/public')
-  }
+  },
 
+  staticBase: process.env.STATIC_BASE
 };
