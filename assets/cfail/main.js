@@ -29,7 +29,7 @@ require(['ap.config'], function(cfg) {
 
   require(['angular', 'cfail/cfail_service'], function(angular) {
     angular.module('cfail', ['cfail.service']).
-      config(['$httpProvider', function($httpProvider) {
+      config(['$httpProvider', '$sceDelegateProvider', function($httpProvider, $sceDelegateProvider) {
         $httpProvider.defaults.transformRequest.unshift(function(data, headers) {
           if (angular.isObject(data) && Object.prototype.toString.call(data) !== '[object File]') {
             data._csrf = cfg.csrfToken;
@@ -37,6 +37,12 @@ require(['ap.config'], function(cfg) {
 
           return data;
         });
+
+        $sceDelegateProvider.resourceUrlWhitelist([
+          // Allow same origin resource loads.
+          'self',
+          // Allow loading from our assets domain.
+          'http://cfail.qiniudn.com/**']);
       }]).
       controller('MainController', ['$scope', 'cfailService', function($scope, cfailService) {
         $scope.signout = function() {

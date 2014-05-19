@@ -26,36 +26,36 @@ define(['angular',
   angular.module('cfail.main', deps).
     config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
       $routeProvider.
-        when(config.requireBase + 'app/:appId/filter-user', {
-          templateUrl: config.requireBase + 'cfail/filter/filter-user/filter-user.html',
+        when('/app/:appId/filter-user', {
+          templateUrl: '/cfail/filter/filter-user/filter-user.html',
           controller: 'FilterUserController'
         }).
-        when(config.requireBase + 'app/:appId/filter-url', {
-          templateUrl: config.requireBase + 'cfail/filter/filter-url/filter-url.html',
+        when('/app/:appId/filter-url', {
+          templateUrl: '/cfail/filter/filter-url/filter-url.html',
           controller: 'FilterUrlController'
         }).
-        when(config.requireBase + 'app/:appId/filter-failures', {
-          templateUrl: config.requireBase + 'cfail/filter/filter-failures/filter-failures.html',
+        when('/app/:appId/filter-failures', {
+          templateUrl: '/cfail/filter/filter-failures/filter-failures.html',
           controller: 'FilterFailuresController'
         }).
-        when(config.requireBase + 'app/:appId/filter-client', {
-          templateUrl: config.requireBase + 'cfail/filter/filter-client/filter-client.html',
+        when('/app/:appId/filter-client', {
+          templateUrl: '/cfail/filter/filter-client/filter-client.html',
           controller: 'FilterClientController'
         }).
-        when(config.requireBase + 'app/:appId/admin/:subsection?', {
-          templateUrl: config.requireBase + 'cfail/admin/admin.html',
+        when('/app/:appId/admin/:subsection?', {
+          templateUrl: '/cfail/admin/admin.html',
           controller: 'AdminController'
         }).
         when('/app/:appId/report', {
-          templateUrl: config.requireBase + 'cfail/report/report.html',
+          templateUrl: '/cfail/report/report.html',
           controller: 'ReportController'
         }).
         when('/app/failure/:exceptionId', {
-          templateUrl: config.requireBase + 'cfail/exception/exception.html',
+          templateUrl: '/cfail/exception/exception.html',
           controller: 'ExceptionController'
         }).
         when('/settings', {
-          templateUrl: config.requireBase + 'cfail/settings/settings.html',
+          templateUrl: '/cfail/settings/settings.html',
           controller: 'SettingsController'
         }).
         otherwise({
@@ -71,7 +71,7 @@ define(['angular',
 
         $scope.createApplication = function() {
           var modal = $modal.open({
-            templateUrl: config.requireBase + 'cfail/application/application-create-dialog/application-create-dialog.html',
+            templateUrl: '/cfail/application/application-create-dialog/application-create-dialog.html',
             controller: 'ApplicationCreateController',
             keyboard: true
           });
