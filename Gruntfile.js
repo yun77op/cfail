@@ -272,6 +272,10 @@ module.exports = function (grunt) {
       dist: {
         src: ['.tmp/public/concat/production.js'],
         dest: '.tmp/public/min/production.js'
+      },
+      reportingjs: {
+        src: ['www/cfail/reporting.js'],
+        dest: 'www/cfail/reporting.js'
       }
     },
 
@@ -547,7 +551,8 @@ module.exports = function (grunt) {
 //    'sails-linker:prodJsJADE',
 //    'sails-linker:prodStylesJADE',
 //    'sails-linker:devTplJADE',
-    'requirejs:compile'
+    'requirejs:compile',
+    'uglify:reportingjs'
   ]);
 
   // When API files are changed:

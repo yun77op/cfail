@@ -7,7 +7,7 @@ cfail.reporting = (function () {
 
     return(K() + K() + "-" + K() + "-" + K() + "-" + K() + "-" + K() + K() + K())
   };
-  var defaults = {id: null, processInterval: 4, daysToStore: 7, onBeforeStore: null, appfailApiRoot: "http://localhost:1337"};
+  var defaults = {id: null, processInterval: 4, daysToStore: 7, onBeforeStore: null, appfailApiRoot: "http://cfail.herokuapp.com"};
   var requestData = {RequestUrl: "", HttpVerb: "", ReferrerUrl: document.referrer, OccurrenceTimeUtc: null, User: "Anonymous", PostValuePairs: [], QueryValuePairs: [], Cookies: [], UniqueId: null, UserAgent: navigator.userAgent, HttpStatus: null, Exceptions: [], PageCorrelationId: random(), IsXHRFailure: false, XHRRequestURL: null, ConnectionStatus: "online", IsStandalone: false, TimeOnPage: 0};
   var defaultException = {ExceptionType: "Javascript Error", ExceptionMessage: "", StackTrace: ""};
   var config = {};
