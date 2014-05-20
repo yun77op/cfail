@@ -106,8 +106,8 @@ module.exports = {
 
     if (json.ID !== 'demo') {
       Application.findOne(json.ID).
-        done(function(app) {
-          if (!app.reportFailureEmail) return;
+        done(function(err, app) {
+          if (err || !app || app.reportFailureEmail) return;
 
           email.sendNotificationEmail(app.reportFailureEmail, null, {
             appId: json.ID
