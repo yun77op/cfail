@@ -5,7 +5,7 @@ Cfail is a exception monitoring system
 
 网站的前端运行期异常收集和分析服务，作为前端生态环境的重要一环，往往被人忽视，缺失异常收集的网站是不健康的，所以个人参考市面上已有的appfail.net，使用Node.js做了个，希望先在公司内部使用起来。
 
-Demo: [http://cfail.herokuapp.com/demo]()
+Demo: [http://cfail.herokuapp.com/demo](http://cfail.herokuapp.com/demo)
 
 简单指南
 -------
