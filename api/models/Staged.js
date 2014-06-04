@@ -12,7 +12,8 @@ module.exports = {
 
     appId: {
       type: 'string',
-      required: true
+      required: true,
+      index: true
     },
 
     appName: {
@@ -22,7 +23,8 @@ module.exports = {
 
     userId: {
       type: 'string',
-      required: true
+      required: true,
+      index: true
     },
 
     userName: {
