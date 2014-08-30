@@ -64,12 +64,12 @@ cfail.reporting = (function () {
       if (element[eventName]) {
         var K = element[eventName];
         element[eventName] = function (O) {
-          K(O);
-          eventListener(O)
+          K.apply(null, arguments);
+          eventListener.apply(null, arguments);
         }
       } else {
         element[eventName] = function (O) {
-          eventListener(O)
+          eventListener.apply(null, arguments);
         }
       }
     }
@@ -152,6 +152,13 @@ cfail.reporting = (function () {
   };
   var catchError = function (message, url, linenumber) {
     log(message, url, linenumber);
+
+    if (typeof message === 'string') {
+        message = {message: message};
+        message.filename = '';
+        message.lineno = linenumber;
+    }
+
     var failOccurrence = clone(requestData);
     failOccurrence.OccurrenceTimeUtc = (message && message.timeStamp) ? new Date(message.timeStamp).getTime() : null;
     var exception = clone(defaultException);
