@@ -33,3 +33,6 @@ assets/components
 # Grunt build tmp dir
 .tmp
 www
+
+
+/config/local.js
