@@ -1,4 +1,4 @@
-define(['angular', '/cfail/cfail_service.js'], function(angular) {
+define(['angular', 'cfail/cfail_service'], function(angular) {
 
   angular.module('cfail.login', ['cfail', 'cfail.service']).
     controller('LoginController', ['$scope', 'cfailService', function($scope, cfailService) {

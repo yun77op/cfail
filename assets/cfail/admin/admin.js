@@ -1,4 +1,4 @@
-define(['angular','_', 'ap.config', 'angular.bootstrap', '/cfail/cfail_service.js',
+define(['angular','_', 'ap.config', 'angular.bootstrap', 'cfail/cfail_service',
         './admin-collaborator/admin-collaborator',
         './admin-integration/admin-integration'], function(angular, _, config) {
 
