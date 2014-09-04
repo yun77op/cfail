@@ -22,7 +22,7 @@ var moment = require('moment');
 var email = require('../../lib/mail');
 
 module.exports = {
-    
+
 
 
   /**
@@ -56,6 +56,7 @@ module.exports = {
 
     json.FailOccurrences.forEach(function(failOccurrence) {
       if (failOccurrence.IsXHRFailure && failOccurrence.Exceptions.length === 0) {
+        failOccurrence.XHRRequestURL = failOccurrence.XHRRequestURL || failOccurrence.XHRRequestUrl;
         failOccurrence.Exceptions.push({
           ExceptionMessage: failOccurrence.HttpVerb + ' ' + failOccurrence.XHRRequestURL + ' ' + failOccurrence.HttpStatus
         });
