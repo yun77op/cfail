@@ -155,7 +155,7 @@ cfail.reporting = (function () {
 
     if (typeof message === 'string') {
         message = {message: message};
-        message.filename = '';
+        message.filename = url;
         message.lineno = linenumber;
     }
 
