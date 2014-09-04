@@ -177,7 +177,7 @@ cfail.reporting = (function () {
       return
     }
     var failOccurrence = clone(requestData);
-    failOccurrence.XHRRequestUrl = xhr.Url;
+    failOccurrence.XHRRequestURL = xhr.Url;
     failOccurrence.IsXHRFailure = true;
     failOccurrence.HttpStatus = xhr.Status;
     failOccurrence.HttpVerb = xhr.Method;

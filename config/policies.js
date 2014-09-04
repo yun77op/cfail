@@ -38,7 +38,8 @@ module.exports.policies = {
   },
 
   ExceptionOccurrenceController: {
-    'create': true
+    'create': true,
+    'jsFail': true
   }
 
   /*

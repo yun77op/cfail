@@ -55,6 +55,12 @@ module.exports = {
     var exceptionOccurrences = [];
 
     json.FailOccurrences.forEach(function(failOccurrence) {
+      if (failOccurrence.IsXHRFailure && failOccurrence.Exceptions.length === 0) {
+        failOccurrence.Exceptions.push({
+          ExceptionMessage: failOccurrence.HttpVerb + ' ' + failOccurrence.XHRRequestURL + ' ' + failOccurrence.HttpStatus
+        });
+      }
+
       failOccurrence.Exceptions.forEach(function(aException) {
         var exception = {
           type: json.ApplicationType,
@@ -107,7 +113,7 @@ module.exports = {
     if (json.ID !== 'demo') {
       Application.findOne(json.ID).
         done(function(err, app) {
-          if (err || !app || app.reportFailureEmail) return;
+          if (err || !app || !app.reportFailureEmail) return;
 
           email.sendNotificationEmail(app.reportFailureEmail, null, {
             appId: json.ID
