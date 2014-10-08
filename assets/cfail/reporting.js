@@ -163,7 +163,7 @@ cfail.reporting = (function () {
     failOccurrence.OccurrenceTimeUtc = (message && message.timeStamp) ? new Date(message.timeStamp).getTime() : null;
     var exception = clone(defaultException);
     exception.ExceptionMessage = message.message;
-    exception.StackTrace = message.filename + " --- line " + message.lineno;
+    exception.StackTrace = message.stack || message.filename + " --- line " + message.lineno;
     failOccurrence.Exceptions.push(exception);
     populateFailOccurrence(failOccurrence);
     if (config.onBeforeStore) {
@@ -295,7 +295,7 @@ cfail.reporting = (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.src = JOSN2_URL;
-    document.body.appendChild(script)
+    document.getElementsByTagName('head')[0].appendChild(script);
   }
 
   (function () {
